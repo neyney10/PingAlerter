@@ -48,7 +48,7 @@ namespace PingAlerter
 
             stbar_label_scansvalue.DataContext = mainWindowViewModel;
            // Log tab
-           LogModel logModel = new LogModel();
+            LogModel logModel = new LogModel();
             logViewModel = new LogViewModel(logModel);
 
             listBox_log.DataContext = logViewModel;
