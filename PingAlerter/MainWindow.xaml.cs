@@ -1,21 +1,14 @@
-﻿using System;
+﻿using PingAlerter.Network;
+using PingAlerter.Other.Log;
+using PingAlerter.Other.MainWindow;
+using PingAlerter.Other.MonitorConfig;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using PingAlerter.Network;
 using System.Diagnostics;
 using System.Threading;
-using System.Windows.Controls.Primitives;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace PingAlerter
 {
@@ -30,16 +23,12 @@ namespace PingAlerter
         Thread Monitor;
 
         // Control models and data sources
-        public LinkedList<string> logs { get; set; }
         bool StartButtonOn = false;
-        public int ScanAmount { get; set; }
 
-        // monitor values //
-        public int LatencyThreshold { get; set; }
-        public int StdDeviationThreshold { get; set; }
-        public int DefGatewayLatencyThreshold { get; set; }
-        public int DefGatewayStdDeviationThreshold { get; set; }
-
+        // ViewModels //
+        MainWindowViewModel mainWindowViewModel; // for general things such as status bar ( should I create a status bar viewModel? )
+        MonitorConfigViewModel monitorConfigViewModel; // for Settings tab
+        LogViewModel logViewModel; // for Logs tab
 
 
         public MainWindow()
@@ -52,24 +41,26 @@ namespace PingAlerter
         {
             player = new System.Media.SoundPlayer(@"D:\temp\Programs\Fiddler\LoadScript.wav");
 
-            LatencyThreshold = 75;
-            StdDeviationThreshold = 40;
-            DefGatewayLatencyThreshold = 95;
-            DefGatewayStdDeviationThreshold = 50;
             // General window
             this.DataContext = this;
+            MainWindowModel mainWindowModel = new MainWindowModel();
+            mainWindowViewModel = new MainWindowViewModel(mainWindowModel);
 
-            // Log tab
-            logs = new LinkedList<string>();
+            stbar_label_scansvalue.DataContext = mainWindowViewModel;
+           // Log tab
+           LogModel logModel = new LogModel();
+            logViewModel = new LogViewModel(logModel);
 
-            listBox_log.ItemsSource = logs;
+            listBox_log.DataContext = logViewModel;
 
             // Monitor tab
 
+
             // Settings tab
-            
+            MonitorConfigModel monitorModel = new MonitorConfigModel();
+            monitorConfigViewModel= new MonitorConfigViewModel(monitorModel);
 
-
+            tab_settings.DataContext = monitorConfigViewModel;
         }
 
 
@@ -115,21 +106,20 @@ namespace PingAlerter
             int overThreshold = 0;
             foreach (var history in current_history)
             {
-                overThreshold += !CheckLatency(history.Value, current_history[NetworkTools.DefaultGatewayAddress], LatencyThreshold, StdDeviationThreshold) ? 1 : 0;
+                overThreshold += !CheckLatency(history.Value, current_history[NetworkTools.DefaultGatewayAddress], monitorConfigViewModel.LatencyThreshold, monitorConfigViewModel.StdDeviationThreshold) ? 1 : 0;
 
-                Application.Current.Dispatcher.Invoke((Action)delegate
-                {
-                    ScanAmount++;
+                mainWindowViewModel.ScanCount++;
 
-                    //listBox_log.Items.Add(new ListBoxItem().Content = history.Key);
-                    this.logs.AddLast("Ping " + history.Key + " RTT: " + history.Value.Avg);
-                    listBox_log.Items.Refresh();
-                });
+                logViewModel.AddLog("Ping " + history.Key + " RTT: " + history.Value.Avg);
             }
 
+            Application.Current.Dispatcher.BeginInvoke((Action)delegate // LATER USE ObservableCollection for this.
+            {
+                listBox_log.Items.Refresh(); 
+            });
 
-            bool is_router_latency_ok = CheckLatencyToRouter(origin_history, scans[NetworkTools.DefaultGatewayAddress], DefGatewayLatencyThreshold);
-            bool is_latency_stable = CheckStability(current_history[NetworkTools.DefaultGatewayAddress], DefGatewayStdDeviationThreshold);
+            bool is_router_latency_ok = CheckLatencyToRouter(origin_history, scans[NetworkTools.DefaultGatewayAddress], monitorConfigViewModel.DefGatewayLatencyThreshold);
+            bool is_latency_stable = CheckStability(current_history[NetworkTools.DefaultGatewayAddress], monitorConfigViewModel.DefGatewayStdDeviationThreshold);
 
             if ((!is_router_latency_ok && !is_latency_stable) || overThreshold > (2.0 / 3.0) * current_history.Count)
                 player.Play();

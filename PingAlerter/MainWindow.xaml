@@ -11,7 +11,7 @@
         <TabControl x:Name="tabControl" HorizontalAlignment="Left" Height="289" VerticalAlignment="Top" Width="518">
             <TabItem Header="Logs" Height="22" Margin="-2,-2,-2.4,0" VerticalAlignment="Top">
                 <Grid Background="#FFE5E5E5" Margin="0,1,-0.2,-1">
-                    <ListBox x:Name="listBox_log" HorizontalAlignment="Left" Height="265" VerticalAlignment="Top" Width="513" Margin="0,0,0,-0.2" />
+                    <ListBox x:Name="listBox_log" HorizontalAlignment="Left" Height="265" VerticalAlignment="Top" Width="513" Margin="0,0,0,-0.2" ItemsSource="{Binding Model.Logs}"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Monitor" RenderTransformOrigin="0.5,0.508">
@@ -22,7 +22,7 @@
                     </LinearGradientBrush>
                 </TabItem.Background>
                 <Grid Background="#FFE5E5E5" Margin="0,0,0,-5" Width="514">
-                    <Button x:Name="btn_start" Content="Start!" HorizontalAlignment="Left" Margin="128,212,0,0" VerticalAlignment="Top" Width="371" Click="btn_start_Click" Height="49" FontSize="36" FontWeight="Bold" Cursor="Hand" BorderBrush="#FF656566">
+                    <Button x:Name="btn_start" Content="Start!" HorizontalAlignment="Left" Margin="117,209,0,0" VerticalAlignment="Top" Width="387" Click="btn_start_Click" Height="49" FontSize="36" FontWeight="Bold" Cursor="Hand" BorderBrush="#FF656566">
                         <Button.Background>
                             <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
                                 <GradientStop Color="#FF26F974"/>
@@ -37,14 +37,14 @@
                     </ListBox>
                 </Grid>
             </TabItem>
-            <TabItem RenderTransformOrigin="0.5,0.508" Header="Settings">
+            <TabItem x:Name="tab_settings" RenderTransformOrigin="0.5,0.508" Header="Settings">
                 <Grid Background="#FFE5E5E5" Margin="0,0,0,-5" Width="514">
                     <TextBox x:Name="txtb_lat_thresh" HorizontalAlignment="Left" Height="23" Margin="120,23,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="70" Text="{Binding LatencyThreshold}"/>
                     <Label x:Name="label" Content="Latency Threshold:" HorizontalAlignment="Left" Margin="10,20,0,0" VerticalAlignment="Top" Width="119"/>
                     <Label x:Name="label_Copy" Content="Stability Threshold:" HorizontalAlignment="Left" Margin="10,46,0,0" VerticalAlignment="Top" Width="119"/>
                     <Label x:Name="label_Copy1" Content="" HorizontalAlignment="Left" Margin="10,77,0,0" VerticalAlignment="Top" Width="119"/>
                     <Label x:Name="label_Copy2" Content="General Addresses:" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" FontWeight="Bold"/>
-                    <TextBox x:Name="txtb_stab_thresh" HorizontalAlignment="Left" Height="23" Margin="120,49,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="70" Text="{Binding StdDeviationThreshold}"/>
+                    <TextBox x:Name="txtb_stab_thresh" HorizontalAlignment="Left" Height="23" Margin="120,49,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="70" Text="{Binding StdDeviationThreshold}" />
                     <TextBox x:Name="txtb_def_lat_thresh" HorizontalAlignment="Left" Height="23" Margin="120,108,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="70" Text="{Binding DefGatewayLatencyThreshold}"/>
                     <Label x:Name="label_Copy3" Content="Latency Threshold:" HorizontalAlignment="Left" Margin="10,105,0,0" VerticalAlignment="Top" Width="119"/>
                     <Label x:Name="label_Copy4" Content="Stability Threshold:" HorizontalAlignment="Left" Margin="10,131,0,0" VerticalAlignment="Top" Width="119"/>
@@ -60,7 +60,7 @@
         </TabControl>
         <StatusBar HorizontalAlignment="Left" Height="30" Margin="2,289,0,0" VerticalAlignment="Top" Width="516" Background="#FFFFFFFF" BorderBrush="Black">
             <Label x:Name="stbar_label_scans" Content="Scans: " Width="42"/>
-            <Label x:Name="stbar_label_scansvalue" Content="{Binding ScanAmount}" Width="35"/>
+            <Label x:Name="stbar_label_scansvalue" Content="{Binding ScanCount}" Width="35" Height="30" FontStyle="Italic"/>
         </StatusBar>
     </Grid>
 </Window>
