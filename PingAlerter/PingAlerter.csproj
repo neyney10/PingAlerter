@@ -74,6 +74,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Common\BaseViewModel.cs" />
+    <Compile Include="Common\Observable.cs" />
+    <Compile Include="Common\Observer.cs" />
+    <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="IO\FileSystem\FileLogger.cs" />
     <Compile Include="Network\LatencyMonitor.cs" />
     <Compile Include="Network\LatencyMonitorConfig.cs" />
@@ -83,6 +87,10 @@
     <Compile Include="Other\MainWindow\MainWindowModel.cs" />
     <Compile Include="Other\MainWindow\MainWindowViewModel.cs" />
     <Compile Include="Other\MonitorConfig\MonitorConfigViewModel.cs" />
+    <Compile Include="ViewModels\MonitorTabControlViewModel.cs" />
+    <Compile Include="Views\MonitorTabControlView.xaml.cs">
+      <DependentUpon>MonitorTabControlView.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -98,6 +106,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Other\MonitorTab\MonitorTab.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MonitorTabControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -139,6 +151,8 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

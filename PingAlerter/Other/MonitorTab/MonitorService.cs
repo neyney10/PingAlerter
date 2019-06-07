@@ -1,4 +1,5 @@
-﻿using PingAlerter.IO.FileSystem;
+﻿using PingAlerter.Common;
+using PingAlerter.IO.FileSystem;
 using PingAlerter.Network;
 using PingAlerter.Other.Log;
 using PingAlerter.Other.MainWindow;
@@ -14,27 +15,17 @@ using System.Windows;
 
 namespace PingAlerter.Other.MonitorTab
 {
-    class MonitorService : IObservable<MonitorServiceNotify>
+    class MonitorService : Observable<MonitorServiceNotify>
     {
         private LatencyMonitor latencyMonitor;
 
-        private ISet<IObserver<MonitorServiceNotify>> Observers;
-
         private int ScanCount = 0;
 
-        #region Dependencies
-        // dependencies
-        private readonly FileLogger fileLogger;
-        #endregion
 
-        public MonitorService()
+
+        public MonitorService(LatencyMonitorConfig configuration)
         {
-            latencyMonitor = new LatencyMonitor();
-            this.Observers = new HashSet<IObserver<MonitorServiceNotify>>();
-
-            this.fileLogger = new FileLogger(@"D:\Logfile.txt"); // log to a file.
-
-
+            latencyMonitor = new LatencyMonitor(configuration);
         }
 
         public void StartMonitor(IEnumerable<string> addresses)
@@ -54,8 +45,6 @@ namespace PingAlerter.Other.MonitorTab
                 LogData logtext = new LogData(DateTime.Now, "Ping", history.Key, history.Value.Avg.ToString());
 
                 NotifyObservers(new MonitorServiceNotify(logtext, ScanCount,MonitorServiceNotify.Type.Log));
-
-                //fileLogger.WriteSingle(logtext);
             }
 
 
@@ -66,12 +55,9 @@ namespace PingAlerter.Other.MonitorTab
             {
                 LogData logtext = new LogData(DateTime.Now, "Alert", "Lag Spike", "W.I.P");
                 NotifyObservers(new MonitorServiceNotify(logtext, ScanCount, MonitorServiceNotify.Type.OverThreshold));
-                //fileLogger.WriteSingle(logtext);
 
             }
 
-
-            //mainWindowViewModel.ScanCount++;
             ScanCount++;
             Debug.WriteLine("Thresh: " + overThreshold + " | Router lat: " + is_router_latency_ok + " | stable: " + is_latency_stable);
         }
@@ -124,39 +110,6 @@ namespace PingAlerter.Other.MonitorTab
             return true;
         }
 
-        #region Observable methods and helper classes
-
-        public void NotifyObservers(MonitorServiceNotify newData)
-        {
-            foreach (IObserver<MonitorServiceNotify> observer in this.Observers)
-                observer.OnNext(newData);
-        }
-
-        public IDisposable Subscribe(IObserver<MonitorServiceNotify> observer)
-        {
-            this.Observers.Add(observer);
-            return new Unsubscriber(this.Observers, observer);
-        }
-
-        private class Unsubscriber : IDisposable
-        {
-            private ISet<IObserver<MonitorServiceNotify>> _observers;
-            private IObserver<MonitorServiceNotify> _observer;
-
-            public Unsubscriber(ISet<IObserver<MonitorServiceNotify>> observers, IObserver<MonitorServiceNotify> observer)
-            {
-                this._observers = observers;
-                this._observer = observer;
-            }
-
-            public void Dispose()
-            {
-                if (_observer != null && _observers.Contains(_observer))
-                    _observers.Remove(_observer);
-
-            }
-        }
-
-        #endregion
+        
     }
 }

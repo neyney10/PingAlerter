@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PingAlerter.Other.MonitorTab
 {
-    class MonitorServiceNotify
+    public class MonitorServiceNotify
     {
         #region public readonly Properties
         /// <summary>

@@ -32,7 +32,6 @@ namespace PingAlerter.Network
 
         }
 
-
          public static IReadOnlyDictionary<string, ScanResult> Scan(IEnumerable<string> hosts, int amount_of_samples)
         {
             var current_scans = new Dictionary<string, Task<ScanResult>>();
@@ -52,7 +51,6 @@ namespace PingAlerter.Network
                 current_scan_results.Add(scan.Key, scan.Value.Result);
 
             return current_scan_results;
-
         }
 
         private static async Task<ScanResult> PingAddress(string ipaddress, int amount)
@@ -82,8 +80,6 @@ namespace PingAlerter.Network
         {
             return new Ping().SendPingAsync(ipaddress, 350);
         }
-
-
 
 
 

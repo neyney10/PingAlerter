@@ -5,68 +5,23 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PingAlerter"
         xmlns:System="clr-namespace:System;assembly=mscorlib"
-        xmlns:Other.MonitorTab="clr-namespace:PingAlerter.Other.MonitorTab" x:Class="PingAlerter.MainWindow"
+        xmlns:Views="clr-namespace:PingAlerter.Views"
+        x:Class="PingAlerter.MainWindow"
         mc:Ignorable="d"
         StateChanged="Window_StateChanged"
-        Title="PingAlerter" Height="350" Width="525" ResizeMode="CanResizeWithGrip">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="176*"/>
-            <ColumnDefinition Width="83*"/>
-        </Grid.ColumnDefinitions>
-        <TabControl x:Name="tabControl" HorizontalAlignment="Left" Height="289" VerticalAlignment="Top" Width="518" Grid.ColumnSpan="2">
-            <TabItem Header="Logs" Height="22" Margin="0" VerticalAlignment="Top">
-                <Grid Background="#FFE5E5E5" Margin="0,1,-0.2,-1">
-                    <DataGrid Name="datagrid_logs" ItemsSource="{Binding Logs}" AlternationCount="2" SelectionMode="Single" AlternatingRowBackground="{DynamicResource {x:Static SystemColors.InfoBrushKey}}" IsReadOnly="True" />
-                </Grid>
-            </TabItem>
-            <TabItem x:Name="tab_monitor" Header="Monitor" RenderTransformOrigin="0.5,0.508" Margin="0">
-                <Other.MonitorTab:MonitorTab />
-            </TabItem>
-            <TabItem x:Name="tab_settings" RenderTransformOrigin="0.5,0.508" Header="Settings" Margin="0">
-                <TabItem.Background>
-                    <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
-                        <GradientStop Color="#FFF0F0F0" Offset="0"/>
-                        <GradientStop Color="#FFE5E5E5" Offset="1"/>
-                    </LinearGradientBrush>
-                </TabItem.Background>
-                <Grid Background="#FFE5E5E5" Margin="0,0,0,-5" Width="514">
-                    <TextBox x:Name="txtb_lat_thresh" HorizontalAlignment="Left" Height="23" Margin="120,23,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="70" Text="{Binding LatencyThreshold}"/>
-                    <Label x:Name="label" Content="Latency Threshold:" HorizontalAlignment="Left" Margin="10,20,0,0" VerticalAlignment="Top" Width="119"/>
-                    <Label x:Name="label_Copy" Content="Stability Threshold:" HorizontalAlignment="Left" Margin="10,46,0,0" VerticalAlignment="Top" Width="119"/>
-                    <Label x:Name="label_Copy1" Content="" HorizontalAlignment="Left" Margin="10,77,0,0" VerticalAlignment="Top" Width="119"/>
-                    <Label x:Name="label_Copy2" Content="General Addresses:" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" FontWeight="Bold"/>
-                    <TextBox x:Name="txtb_stab_thresh" HorizontalAlignment="Left" Height="23" Margin="120,49,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="70" Text="{Binding StdDeviationThreshold}" />
-                    <TextBox x:Name="txtb_def_lat_thresh" HorizontalAlignment="Left" Height="23" Margin="120,108,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="70" Text="{Binding DefGatewayLatencyThreshold}"/>
-                    <Label x:Name="label_Copy3" Content="Latency Threshold:" HorizontalAlignment="Left" Margin="10,105,0,0" VerticalAlignment="Top" Width="119"/>
-                    <Label x:Name="label_Copy4" Content="Stability Threshold:" HorizontalAlignment="Left" Margin="10,131,0,0" VerticalAlignment="Top" Width="119"/>
-                    <Label x:Name="label_Copy5" Content="Default Gateway:" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" FontWeight="Bold" Margin="0,85,0,0"/>
-                    <TextBox x:Name="txtb_def_stab_thresh" HorizontalAlignment="Left" Height="23" Margin="120,134,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="70" Text="{Binding DefGatewayStdDeviationThreshold}"/>
-                    <Label x:Name="label_Copy6" Content="PreCheck:" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" FontWeight="Bold" Margin="227,0,0,0"/>
-                    <Label x:Name="label_Copy7" Content="Monitor:" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" FontWeight="Bold" Margin="227,85,0,0"/>
-                    <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="274,46,0,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
-                    <Label x:Name="label_Copy8" Content="W.I.P" HorizontalAlignment="Left" Margin="298,31,0,0" VerticalAlignment="Top" Width="119"/>
-                    <Label x:Name="label_Copy9" Content="W.I.P" HorizontalAlignment="Left" Margin="300,116,0,0" VerticalAlignment="Top" Width="119"/>
-                </Grid>
-            </TabItem>
-            <TabItem BorderBrush="#FFB08521" Header="Experimental" Margin="0">
-                <TabItem.Background>
-                    <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
-                        <GradientStop Color="#FFF0F0F0" Offset="0"/>
-                        <GradientStop Color="#FFFABC6D" Offset="1"/>
-                    </LinearGradientBrush>
-                </TabItem.Background>
+        Title="PingAlerter" Height="350" Width="525" ResizeMode="CanResizeWithGrip" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" MinHeight="92">
+    <Grid UseLayoutRounding="True" Grid.IsSharedSizeScope="True">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="90*"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
 
-                <Grid Background="#FFE5E5E5" Margin="0,1,-0.2,-1">
-                    <Button x:Name="Btn_experimental" Content="Button" HorizontalAlignment="Left" Margin="144,56,0,0" VerticalAlignment="Top" Width="163" Height="58" Command="{Binding Btn_experimental_OnClick}"/>
+        <Views:MonitorTabControlView x:Name="MonitorTabControl" Grid.Row="0"  Margin="0" Grid.IsSharedSizeScope="True"/>
 
-                </Grid>
-
-            </TabItem>
-        </TabControl>
-        <StatusBar HorizontalAlignment="Left" Height="30" Margin="2,289,0,0" VerticalAlignment="Top" Width="516" Background="#FFFFFFFF" BorderBrush="Black" Grid.ColumnSpan="2">
+        <StatusBar Grid.Row="1" Margin="0" VerticalAlignment="Bottom" Background="#FFFFFFFF" BorderBrush="Black" Grid.ColumnSpan="2" Grid.IsSharedSizeScope="True" Panel.ZIndex="1" VerticalContentAlignment="Bottom">
             <Label x:Name="stbar_label_scans" Content="Scans: " Width="42"/>
             <Label x:Name="stbar_label_scansvalue" Content="{Binding ScanCount}" Width="35" Height="30" FontStyle="Italic"/>
         </StatusBar>
+
     </Grid>
 </Window>

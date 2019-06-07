@@ -1,4 +1,5 @@
 ﻿
+using PingAlerter.Common;
 using PingAlerter.IO.FileSystem;
 using PingAlerter.Network;
 using PingAlerter.Other.Log;
@@ -6,6 +7,7 @@ using PingAlerter.Other.MainWindow;
 using PingAlerter.Other.MonitorConfig;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -19,7 +21,7 @@ using System.Windows.Threading;
 
 namespace PingAlerter.Other.MonitorTab
 {
-    class MonitorTabViewModel : IObservable<MonitorServiceNotify>
+    public class MonitorTabViewModel : BaseViewModel<MonitorServiceNotify>
     {
         // Model Interface and stuff
         private MonitorTabModel Model;
@@ -29,30 +31,42 @@ namespace PingAlerter.Other.MonitorTab
 
         // this ViewModel interaction logic
         public StartLatencyMonitorCommand startLatencyMonitorCommand { get; set; }
-        public Brush BtnStartBackgroundColor { get; set; }
-        public string BtnStartContent { get; set; }
+        private Brush btnStartBackgroundColor;
+        public Brush BtnStartBackgroundColor
+        {
+            get { return this.btnStartBackgroundColor; }
+            set { this.btnStartBackgroundColor = value; OnPropertyChanged("BtnStartBackgroundColor"); }
+        }
 
-        // Observable memebrs
-        private ISet<IObserver<MonitorServiceNotify>> Observers;
+        private string btnStartContent;
+        public string BtnStartContent
+        {
+            get { return this.btnStartContent; }
+            set { this.btnStartContent = value; OnPropertyChanged("BtnStartContent"); }
+        }
+
 
         // Temp data members
-        Thread Monitor;
-        FileLogger filelogger;
-        System.Media.SoundPlayer player;
-        MonitorService monitorService;
+        Observer<MonitorServiceNotify> MonitorObserver;
 
 
         // constructor
-        public MonitorTabViewModel(LogViewModel logViewModel)
+        public MonitorTabViewModel()
         {
             this.Model = new MonitorTabModel();
-            this.Observers = new HashSet<IObserver<MonitorServiceNotify>>();
+
+            MonitorObserver = new Observer<MonitorServiceNotify>((data) => { NotifyObservers(data); });
             
-            
-            this.monitorService = new MonitorService();
-            MonitorObserver o = new MonitorObserver((data) => { NotifyObservers(data); });
-            this.monitorService.Subscribe(o);
-            this.startLatencyMonitorCommand = new StartLatencyMonitorCommand(monitorService,this.Model.Addresses);
+            this.startLatencyMonitorCommand = new StartLatencyMonitorCommand(this.Model.Addresses, this);
+
+            Init();
+        }
+
+        public void Init()
+        {
+            BtnStartContent = "Start!";
+            BtnStartBackgroundColor = new LinearGradientBrush(Color.FromRgb(25, 200, 33), Color.FromRgb(0, 233, 88), 1);
+
         }
 
         public class StartLatencyMonitorCommand : ICommand
@@ -61,20 +75,25 @@ namespace PingAlerter.Other.MonitorTab
             public event EventHandler CanExecuteChanged;
 
             private bool can_execute { get; set; }
-            private readonly MonitorService monitorService;
+            private bool IsChecked = false;
+            private MonitorService monitorService;
             private Thread Monitor;
-            private IEnumerable<string> Addresses;
+            private readonly IEnumerable<string> Addresses;
+            private readonly MonitorTabViewModel ViewModel;
+
+
 
             public bool canExecute {
                 get { return can_execute; }
                 set { this.can_execute = value; OnCanExecuteChanged(); }
             }
 
-            public StartLatencyMonitorCommand(MonitorService monitorService, IEnumerable<string> addresses)
+            public StartLatencyMonitorCommand(IEnumerable<string> addresses, MonitorTabViewModel viewModel)
             {
-                this.monitorService = monitorService;
                 this.Addresses = addresses;
                 can_execute = true;
+                this.ViewModel = viewModel;
+  
             }
 
             public bool CanExecute(object parameter)
@@ -82,29 +101,31 @@ namespace PingAlerter.Other.MonitorTab
                 return this.canExecute;
             }
 
-            public void Execute(object parameter)
+            public void Execute(object latencyMonitorConfig)
             {
-                if (1==2)
+
+                if (IsChecked)
                 {
-                    canExecute = false;
+                    IsChecked = false;
                     Monitor.Abort(); // TODO: change it to stop the thread using a boolean or somethin.
 
-                    //BtnStartBackgroundColor = new LinearGradientBrush(Color.FromRgb(25, 200, 33), Color.FromRgb(0, 233, 88), 1);
-                    //BtnStartContent = "Start!";
+                    this.ViewModel.BtnStartBackgroundColor = new LinearGradientBrush(Color.FromRgb(25, 200, 33), Color.FromRgb(0, 233, 88), 1);
+                    this.ViewModel.BtnStartContent = "Start!";
 
                 }
                 else
                 {
-                    canExecute = true;
+                    IsChecked = true;
+                    //LatencyMonitorConfig configuration = (LatencyMonitorConfig) latencyMonitorConfig;
+                    LatencyMonitorConfig configuration = new LatencyMonitorConfig();
+                    this.monitorService = new MonitorService(configuration);
+                    this.monitorService.Subscribe(this.ViewModel.MonitorObserver);
 
-                    //LatencyMonitor latencyMonitor = new LatencyMonitor();
-                    //latencyMonitor.PreCheck(Addresses, 5, 4, 30);
-                    
                     Monitor = new Thread(() => { monitorService.StartMonitor(this.Addresses); });
                     Monitor.Start();
 
-                    //BtnStartBackgroundColor = new SolidColorBrush(Color.FromRgb(200, 25, 25));
-                    //BtnStartContent = "Stop!";
+                    this.ViewModel.BtnStartBackgroundColor = new SolidColorBrush(Color.FromRgb(200, 25, 25));
+                    this.ViewModel.BtnStartContent = "Stop!";
                 }
             }
 
@@ -118,65 +139,7 @@ namespace PingAlerter.Other.MonitorTab
             }
         }
 
-        class MonitorObserver : IObserver<MonitorServiceNotify>
-        {
-            private Action<MonitorServiceNotify> Callback;
-
-            public MonitorObserver(Action<MonitorServiceNotify> callback)
-            {
-                this.Callback = callback;
-            }
-
-            public void OnCompleted()
-            {
-                throw new NotImplementedException();
-            }
-
-            public void OnError(Exception error)
-            {
-                throw new NotImplementedException();
-            }
-
-            public void OnNext(MonitorServiceNotify value)
-            {
-                this.Callback(value); 
-            }
-        }
 
 
-        #region Observable methods and helper classes
-
-        public void NotifyObservers(MonitorServiceNotify newData)
-        {
-            foreach (IObserver<MonitorServiceNotify> observer in this.Observers)
-                observer.OnNext(newData);
-        }
-
-        public IDisposable Subscribe(IObserver<MonitorServiceNotify> observer)
-        {
-            this.Observers.Add(observer);
-            return new Unsubscriber(this.Observers, observer);
-        }
-
-        private class Unsubscriber : IDisposable
-        {
-            private ISet<IObserver<MonitorServiceNotify>> _observers;
-            private IObserver<MonitorServiceNotify> _observer;
-
-            public Unsubscriber(ISet<IObserver<MonitorServiceNotify>> observers, IObserver<MonitorServiceNotify> observer)
-            {
-                this._observers = observers;
-                this._observer = observer;
-            }
-
-            public void Dispose()
-            {
-                if (_observer != null && _observers.Contains(_observer))
-                    _observers.Remove(_observer);
-
-            }
-        }
-
-        #endregion
     }
 }

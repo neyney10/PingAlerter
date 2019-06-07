@@ -1,10 +1,12 @@
-﻿using PingAlerter.Network;
+﻿using PingAlerter.Common;
+using PingAlerter.Network;
+using System;
 using System.ComponentModel;
 
 namespace PingAlerter.Other.MonitorConfig
 {
 
-    public class MonitorConfigViewModel : INotifyPropertyChanged
+    public class MonitorConfigViewModel : BaseViewModel<Object>
     {
         private LatencyMonitorConfig Model;
 
@@ -37,12 +39,5 @@ namespace PingAlerter.Other.MonitorConfig
             set { Model.DefGatewayStdDeviationThreshold = value; OnPropertyChanged("DefGatewayStdDeviationThreshold"); }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this,
-                    new PropertyChangedEventArgs(propertyName));
-        }
     }
 }

@@ -1,9 +1,11 @@
-﻿using PingAlerter.IO.FileSystem;
+﻿using PingAlerter.Common;
+using PingAlerter.IO.FileSystem;
 using PingAlerter.Network;
 using PingAlerter.Other.Log;
 using PingAlerter.Other.MainWindow;
 using PingAlerter.Other.MonitorConfig;
 using PingAlerter.Other.MonitorTab;
+using PingAlerter.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -21,85 +23,35 @@ namespace PingAlerter
     /// </summary>
     public partial class MainWindow : Window
     {
-
-        private System.Media.SoundPlayer player;
-        Thread Monitor; //temp
-        private FileLogger filelogger;
-  
-        // Control models and data sources
-        private bool StartButtonOn = false;
-
-        // ViewModels //
-        MainWindowViewModel mainWindowViewModel; // for general things such as status bar ( should I create a status bar viewModel? )
-        MonitorTabViewModel monitorTabViewModel; // for monitor tab
-        MonitorConfigViewModel monitorConfigViewModel; // for Settings tab
-        LogViewModel logViewModel; // for Logs tab
-
+        MainWindowModel mainWindowViewModel;
+        MonitorTabControlViewModel monitorTabControlViewModel;
 
         public MainWindow()
         {
             InitializeComponent();
+            InitViewModels();
             InitClass();
         }
 
-        public void InitClass()
+        private void InitClass()
         {
-            player = new System.Media.SoundPlayer(@"D:\temp\Programs\Fiddler\LoadScript.wav");
-            filelogger = new FileLogger(@"D:\LogFile.txt");
-
-            // General window
-            this.DataContext = this;
-            MainWindowModel mainWindowModel = new MainWindowModel();
-            mainWindowViewModel = new MainWindowViewModel(mainWindowModel);
-
-            stbar_label_scansvalue.DataContext = mainWindowViewModel;
-            // Log tab
-            logViewModel = new LogViewModel();
-
-            datagrid_logs.DataContext = logViewModel;
-
-
-
-            // Settings tab
-            LatencyMonitorConfig monitorModel = new LatencyMonitorConfig();
-            monitorConfigViewModel= new MonitorConfigViewModel(monitorModel);
-
-            tab_settings.DataContext = monitorConfigViewModel;
-
-            // Monitor tab
-            monitorTabViewModel = new MonitorTabViewModel(logViewModel);
-
-            tab_monitor.DataContext = monitorTabViewModel;
-
-            MonitorObserver o = new MonitorObserver((data)=> 
-            {
-                switch(data.eventType)
+            Observer<int> TabControlObserver = new Observer<int>(
+                (data)=>
                 {
-                    case MonitorServiceNotify.Type.Log:
-                        logViewModel.AddLog(data.Data);
-                        break;
-                    case MonitorServiceNotify.Type.OverThreshold:
-                        logViewModel.AddLog(data.Data);
-                        player.Play();
-                        break;
+                    mainWindowViewModel.ScanCount = data;
                 }
-
-                filelogger.WriteSingle(data.Data);
-                mainWindowViewModel.ScanCount = data.ScanCount;
-
-                Debug.WriteLine("OBSERVER OF MainWindow, ScanCount: "+ data.ScanCount);
-                
-            });
-
-            monitorTabViewModel.Subscribe(o);
-
-            // Experimental tab
-            ExperimentalViewModel experimentalViewModel = new ExperimentalViewModel();
-
-            Btn_experimental.DataContext = experimentalViewModel;
-
-
+                );
         }
+
+        private void InitViewModels()
+        {
+            mainWindowViewModel = new MainWindowModel();
+            stbar_label_scansvalue.DataContext = mainWindowViewModel;
+
+            monitorTabControlViewModel = new MonitorTabControlViewModel();
+            MonitorTabControl.DataContext = monitorTabControlViewModel;
+        }
+
 
         private void Window_StateChanged(object sender, EventArgs e)
         {
@@ -118,60 +70,6 @@ namespace PingAlerter
             }
         }
 
-
-   
-
-        class MonitorObserver : IObserver<MonitorServiceNotify>
-        {
-            private Action<MonitorServiceNotify> Callback;
-
-            public MonitorObserver(Action<MonitorServiceNotify> callback)
-            {
-                this.Callback = callback;
-            }
-
-            public void OnCompleted()
-            {
-                throw new NotImplementedException();
-            }
-
-            public void OnError(Exception error)
-            {
-                throw new NotImplementedException();
-            }
-
-            public void OnNext(MonitorServiceNotify value)
-            {
-                this.Callback(value);
-            }
-        }
-
-
-        public class ExperimentalViewModel
-        {
-
-            public ICommand Btn_experimental_OnClick { get; set; }
-
-            public ExperimentalViewModel()
-            {
-                this.Btn_experimental_OnClick = new ExperimentalCommand();
-            }
-
-            public class ExperimentalCommand : ICommand
-            {
-                public event EventHandler CanExecuteChanged;
-
-                public bool CanExecute(object parameter)
-                {
-                    return true;
-                }
-
-                public void Execute(object parameter)
-                {
-                    new Window().Show();
-                }
-            }
-        }
 
     }
 }

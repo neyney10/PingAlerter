@@ -5,21 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PingAlerter.Other.MonitorTab"
              mc:Ignorable="d">
-    <Grid Background="#FFE5E5E5" Margin="0,0,0,-5" Width="514">
+    <Grid Background="#FFE5E5E5" Margin="0,0,0,-5">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="135*"/>
             <ColumnDefinition Width="379*"/>
         </Grid.ColumnDefinitions>
-        <Button x:Name="btn_start" Content="Start!" HorizontalAlignment="Left" Margin="117,209,0,0" VerticalAlignment="Top" Width="387"  Height="49" FontSize="36" FontWeight="Bold" Cursor="Hand" BorderBrush="#FF656566" Grid.ColumnSpan="2" Command="{Binding startLatencyMonitorCommand}">
-            <Button.Background>
-                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
-                    <GradientStop Color="#FF26F974"/>
-                    <GradientStop Color="#FF36975A" Offset="1"/>
-                </LinearGradientBrush>
-            </Button.Background>
-        </Button>
+        <Button x:Name="btn_start" Content="{Binding BtnStartContent}" Margin="117,0,0,5.2" VerticalAlignment="Bottom"  Height="49" FontSize="36" FontWeight="Bold" Cursor="Hand" BorderBrush="#FF656566" Grid.ColumnSpan="2" Background="{Binding BtnStartBackgroundColor}" Command="{Binding startLatencyMonitorCommand}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" MinWidth="387"/>
         <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="23" Margin="128,21,0,0" TextWrapping="Wrap" Text="{Binding txtb_newAddress}" VerticalAlignment="Top" Width="120" Grid.ColumnSpan="2" />
-        <ListBox x:Name="listBox_addresses" HorizontalAlignment="Left" Height="265" VerticalAlignment="Bottom" Width="112" Margin="0,0,0,-0.8" ItemsSource="{Binding Addresses}">
+        <ListBox x:Name="listBox_addresses" HorizontalAlignment="Left" Width="112" Margin="0" ItemsSource="{Binding Addresses}" MinHeight="265">
             <ListBox.Background>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="#FFE0DAEE" Offset="0.981"/>
