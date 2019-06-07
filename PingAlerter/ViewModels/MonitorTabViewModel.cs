@@ -1,10 +1,10 @@
 ﻿
 using PingAlerter.Common;
 using PingAlerter.IO.FileSystem;
+using PingAlerter.Models;
 using PingAlerter.Network;
 using PingAlerter.Other.Log;
-using PingAlerter.Other.MainWindow;
-using PingAlerter.Other.MonitorConfig;
+using PingAlerter.Other.MonitorTab;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -19,12 +19,14 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 
-namespace PingAlerter.Other.MonitorTab
+namespace PingAlerter.ViewModels
 {
     public class MonitorTabViewModel : BaseViewModel<MonitorServiceNotify>
     {
         // Model Interface and stuff
         private MonitorTabModel Model;
+
+        private LatencyMonitorConfig Configuration { get; set; }
 
         public IEnumerable<string> Addresses { get { return this.Model.Addresses; } }
         public string txtb_newAddress { get { return Model.txtb_newAddress; } set { this.Model.txtb_newAddress = value; } }
@@ -49,18 +51,27 @@ namespace PingAlerter.Other.MonitorTab
         // Temp data members
         Observer<MonitorServiceNotify> MonitorObserver;
 
+        #region Constructors
+        // constructor with default dependancy
+        public MonitorTabViewModel() : this(new LatencyMonitorConfig())
+        {
+        }
 
-        // constructor
-        public MonitorTabViewModel()
+        // With pre-defined dependancy
+        public MonitorTabViewModel(LatencyMonitorConfig configuration)
         {
             this.Model = new MonitorTabModel();
+            this.Configuration = configuration;
 
-            MonitorObserver = new Observer<MonitorServiceNotify>((data) => { NotifyObservers(data); });
-            
+            MonitorObserver = new Observer<MonitorServiceNotify>(
+                (data) => { NotifyObservers(data); });
+
             this.startLatencyMonitorCommand = new StartLatencyMonitorCommand(this.Model.Addresses, this);
+
 
             Init();
         }
+        #endregion
 
         public void Init()
         {
@@ -116,8 +127,8 @@ namespace PingAlerter.Other.MonitorTab
                 else
                 {
                     IsChecked = true;
-                    //LatencyMonitorConfig configuration = (LatencyMonitorConfig) latencyMonitorConfig;
-                    LatencyMonitorConfig configuration = new LatencyMonitorConfig();
+                    
+                    LatencyMonitorConfig configuration = this.ViewModel.Configuration;
                     this.monitorService = new MonitorService(configuration);
                     this.monitorService.Subscribe(this.ViewModel.MonitorObserver);
 

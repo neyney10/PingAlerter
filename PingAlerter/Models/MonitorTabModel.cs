@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PingAlerter.Other.MonitorTab
+namespace PingAlerter.Models
 {
     class MonitorTabModel
     {

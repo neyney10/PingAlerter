@@ -3,7 +3,7 @@ using PingAlerter.Network;
 using System;
 using System.ComponentModel;
 
-namespace PingAlerter.Other.MonitorConfig
+namespace PingAlerter.ViewModels
 {
 
     public class MonitorConfigViewModel : BaseViewModel<Object>

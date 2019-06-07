@@ -1,9 +1,8 @@
 ﻿using PingAlerter.Common;
 using PingAlerter.IO.FileSystem;
+using PingAlerter.Models;
 using PingAlerter.Network;
 using PingAlerter.Other.Log;
-using PingAlerter.Other.MainWindow;
-using PingAlerter.Other.MonitorConfig;
 using PingAlerter.Other.MonitorTab;
 using PingAlerter.ViewModels;
 using System;
@@ -24,34 +23,22 @@ namespace PingAlerter
     public partial class MainWindow : Window
     {
         MainWindowViewModel mainWindowViewModel;
-        MonitorTabControlViewModel monitorTabControlViewModel;
 
         public MainWindow()
         {
             InitializeComponent();
             InitViewModels();
-            InitClass();
+            BindViewModels();
         }
 
-        private void InitClass()
+        private void BindViewModels()
         {
-            Observer<int> TabControlObserver = new Observer<int>(
-                (data)=>
-                {
-                    mainWindowViewModel.ScanCount = data;
-                }
-                );
-
-            monitorTabControlViewModel.Subscribe(TabControlObserver);
+            this.DataContext = mainWindowViewModel;
         }
 
         private void InitViewModels()
         {
-            mainWindowViewModel = new MainWindowViewModel(new MainWindowModel());
-            stbar_label_scansvalue.DataContext = mainWindowViewModel;
-
-            monitorTabControlViewModel = MonitorTabControl.monitorTabControlViewModel;//new MonitorTabControlViewModel();
-            MonitorTabControl.DataContext = monitorTabControlViewModel;
+            mainWindowViewModel = new MainWindowViewModel();
 
         }
 
@@ -73,6 +60,6 @@ namespace PingAlerter
             }
         }
 
-
+    
     }
 }

@@ -53,6 +53,9 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>wifiicon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -79,17 +82,28 @@
     <Compile Include="Common\Observer.cs" />
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="IO\FileSystem\FileLogger.cs" />
+    <Compile Include="Models\StatusBarModel.cs" />
     <Compile Include="Network\LatencyMonitor.cs" />
     <Compile Include="Network\LatencyMonitorConfig.cs" />
     <Compile Include="Other\Log\LogData.cs" />
-    <Compile Include="Other\Log\LogModel.cs" />
-    <Compile Include="Other\Log\LogViewModel.cs" />
-    <Compile Include="Other\MainWindow\MainWindowModel.cs" />
-    <Compile Include="Other\MainWindow\MainWindowViewModel.cs" />
-    <Compile Include="Other\MonitorConfig\MonitorConfigViewModel.cs" />
+    <Compile Include="Models\LogModel.cs" />
+    <Compile Include="ViewModels\LogViewModel.cs" />
+    <Compile Include="Models\MainWindowModel.cs" />
+    <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\MonitorConfigViewModel.cs" />
     <Compile Include="ViewModels\MonitorTabControlViewModel.cs" />
+    <Compile Include="ViewModels\StatusBarViewModel.cs" />
+    <Compile Include="Views\LogsTabView.xaml.cs">
+      <DependentUpon>LogsTabView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MonitorTabControlView.xaml.cs">
       <DependentUpon>MonitorTabControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SettingsTabView.xaml.cs">
+      <DependentUpon>SettingsTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\StatusBarView.xaml.cs">
+      <DependentUpon>StatusBarView.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -105,11 +119,23 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Other\MonitorTab\MonitorTab.xaml">
+    <Page Include="Views\LogsTabView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MonitorTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MonitorTabControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SettingsTabView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\StatusBarView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -118,13 +144,13 @@
     <Compile Include="Network\NetworkTools.cs" />
     <Compile Include="Network\ScanHistory.cs" />
     <Compile Include="Network\ScanResult.cs" />
-    <Compile Include="Other\MonitorTab\MonitorService.cs" />
-    <Compile Include="Other\MonitorTab\MonitorServiceNotify.cs" />
-    <Compile Include="Other\MonitorTab\MonitorTab.xaml.cs">
-      <DependentUpon>MonitorTab.xaml</DependentUpon>
+    <Compile Include="Monitors\MonitorService.cs" />
+    <Compile Include="Monitors\MonitorServiceNotify.cs" />
+    <Compile Include="Views\MonitorTabView.xaml.cs">
+      <DependentUpon>MonitorTabView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Other\MonitorTab\MonitorTabModel.cs" />
-    <Compile Include="Other\MonitorTab\MonitorTabViewModel.cs" />
+    <Compile Include="Models\MonitorTabModel.cs" />
+    <Compile Include="ViewModels\MonitorTabViewModel.cs" />
     <Compile Include="Probability\ProbabilityOP.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -152,7 +178,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\" />
+    <Resource Include="wifiicon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

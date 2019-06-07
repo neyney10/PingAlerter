@@ -12,16 +12,13 @@
         Title="PingAlerter" Height="350" Width="525" ResizeMode="CanResizeWithGrip" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" MinHeight="92">
     <Grid UseLayoutRounding="True" Grid.IsSharedSizeScope="True">
         <Grid.RowDefinitions>
-            <RowDefinition Height="90*"/>
+            <RowDefinition Height="9*"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
 
-        <Views:MonitorTabControlView x:Name="MonitorTabControl" Grid.Row="0"  Margin="0" Grid.IsSharedSizeScope="True"/>
+        <Views:MonitorTabControlView DataContext="{Binding monitorTabControlViewModel}" x:Name="MonitorTabControl" Grid.Row="0"  Margin="0,0,0.4,0.4" Grid.IsSharedSizeScope="True" Grid.ColumnSpan="2"/>
 
-        <StatusBar Grid.Row="1" Margin="0" VerticalAlignment="Bottom" Background="#FFFFFFFF" BorderBrush="Black" Grid.ColumnSpan="2" Grid.IsSharedSizeScope="True" Panel.ZIndex="1" VerticalContentAlignment="Bottom">
-            <Label x:Name="stbar_label_scans" Content="Scans: " Width="42"/>
-            <Label x:Name="stbar_label_scansvalue" Content="{Binding ScanCount}" Width="35" Height="30" FontStyle="Italic"/>
-        </StatusBar>
+        <Views:StatusBarView DataContext="{Binding statusBarViewModel}"   Grid.RowSpan="2" VerticalAlignment="Bottom"/>
 
     </Grid>
 </Window>

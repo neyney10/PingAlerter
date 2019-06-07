@@ -2,8 +2,6 @@
 using PingAlerter.IO.FileSystem;
 using PingAlerter.Network;
 using PingAlerter.Other.Log;
-using PingAlerter.Other.MainWindow;
-using PingAlerter.Other.MonitorConfig;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,7 +18,6 @@ namespace PingAlerter.Other.MonitorTab
         private LatencyMonitor latencyMonitor;
 
         private int ScanCount = 0;
-
 
 
         public MonitorService(LatencyMonitorConfig configuration)
@@ -55,7 +52,6 @@ namespace PingAlerter.Other.MonitorTab
             {
                 LogData logtext = new LogData(DateTime.Now, "Alert", "Lag Spike", "W.I.P");
                 NotifyObservers(new MonitorServiceNotify(logtext, ScanCount, MonitorServiceNotify.Type.OverThreshold));
-
             }
 
             ScanCount++;

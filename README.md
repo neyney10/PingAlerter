@@ -11,5 +11,7 @@ in general the user can config the threshold detection values for lag spikes.
 the tool also differentiate Latency to router (Wi-Fi) and Latency to remote server address, as most lag spikes occur because of bad Wi-Fi signal or noise.
 
 ## Screenshots
+### Version 0.15 (Development build)
+### Version 0.1 (Development build)
 ![](/Media/screenshot1_settings.png)
 ![](/Media/screenshot2_logs.png)

@@ -1,0 +1,12 @@
+﻿<UserControl x:Class="PingAlerter.Views.LogsTabView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PingAlerter.Views"
+             mc:Ignorable="d" 
+             DataContext="{Binding LogViewModel}">
+    <Grid Background="#FFE5E5E5" Margin="0,1,-0.2,-1">
+        <DataGrid Name="datagrid_logs" ItemsSource="{Binding Logs}" AlternationCount="2" SelectionMode="Single" AlternatingRowBackground="{DynamicResource {x:Static SystemColors.InfoBrushKey}}" IsReadOnly="True" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />
+    </Grid>
+</UserControl>

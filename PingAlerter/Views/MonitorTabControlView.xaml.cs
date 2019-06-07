@@ -2,8 +2,7 @@
 using PingAlerter.IO.FileSystem;
 using PingAlerter.Network;
 using PingAlerter.Other.Log;
-using PingAlerter.Other.MainWindow;
-using PingAlerter.Other.MonitorConfig;
+
 using PingAlerter.Other.MonitorTab;
 using PingAlerter.ViewModels;
 using System;
@@ -36,7 +35,7 @@ namespace PingAlerter.Views
         {
             InitializeComponent();
 
-            InitViewModels();
+            // InitViewModels();
         }
 
 
@@ -48,9 +47,7 @@ namespace PingAlerter.Views
             // General window
             this.DataContext = monitorTabControlViewModel;
 
-            tab_logs.DataContext        = monitorTabControlViewModel.logViewModel;
-            tab_monitor.DataContext     = monitorTabControlViewModel.monitorTabViewModel;
-            tab_settings.DataContext    = monitorTabControlViewModel.monitorConfigViewModel;
+
             
             // Experimental tab
             // Btn_experimental.DataContext = experimentalViewModel;
