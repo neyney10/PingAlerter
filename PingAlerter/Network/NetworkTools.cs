@@ -12,81 +12,28 @@ using System.Threading.Tasks;
 
 namespace PingAlerter.Network
 {
-    class NetworkTools
+    public static class NetworkTools
     {
        
-        private System.Media.SoundPlayer player;
+        public static string defaultGatewayAddress;
+        public static string DefaultGatewayAddress
+        { 
+            get
+            {
+                if (defaultGatewayAddress == null)
+                    DefaultGatewayAddress = GetDefaultGateway().ToString();
 
-        private Dictionary<string, ScanHistory> HostScanHistory;
-        private Dictionary<string, ScanHistory> HostScanHistoryOrigin;
-        public static string DefaultGatewayAddress { get; set; }
-    
+                return defaultGatewayAddress;
+            }
+            private set
+            {
+                defaultGatewayAddress = value;
+            }
 
-        public NetworkTools()
-        {
-            if(DefaultGatewayAddress == null)
-                DefaultGatewayAddress = GetDefaultGateway().ToString();
-
-            player = new System.Media.SoundPlayer(@"D:\temp\Programs\Fiddler\LoadScript.wav");
-
-            this.HostScanHistory = new Dictionary<string, ScanHistory>();
-            this.HostScanHistoryOrigin = new Dictionary<string, ScanHistory>();
-
-          
-        
-            // PreCheck(new string[] { DefaultGatewayAddress, "8.8.8.8", "31.168.35.130" });     // router ip, google dns, zap.co.il        
         }
 
 
-        public void PreCheck(IEnumerable<string> hosts, int amount_of_samples, int amount_of_ping_samples,int delay_between_samples)
-        {
-            Dictionary<string, ScanResult> scans;
-
-            int history_size = 3;
-            // create new entries for hosts / clean history.
-            foreach (string host in hosts)
-            { 
-                HostScanHistory.Add(host, new ScanHistory(history_size));
-                HostScanHistoryOrigin.Add(host, new ScanHistory(amount_of_samples));
-            }
-
-
-            HostScanHistory.Add(DefaultGatewayAddress, new ScanHistory(history_size));
-            HostScanHistoryOrigin.Add(DefaultGatewayAddress, new ScanHistory(amount_of_samples));
-
-            // scan multiple times to get more accurate sample.
-            for (int i = 0; i < amount_of_samples; i++)
-            {
-                Thread.Sleep(delay_between_samples);
-
-                scans = Scan(hosts, amount_of_ping_samples);
-
-                foreach (KeyValuePair<string,ScanResult> scan in scans)
-                {
-                    HostScanHistoryOrigin[scan.Key].AddResult(scan.Value);
-
-                    Debug.WriteLine("[" + scan.Key + "] Avg rtt: " + scan.Value.Avg);
-                }
-            }
-
-
-
-            // ---------------- TEMP -------------------- //
-            foreach (KeyValuePair<string, ScanHistory> history in HostScanHistoryOrigin)
-            {
-                List<double> samples = new List<double>();
-                foreach (ScanResult scan in history.Value.Results)
-                    samples.Add(scan.Avg);
-                Debug.WriteLine(">> [std dev of " + history.Key + "] " + Probability.ProbabilityOP.StandardDeviation(samples));
-            }
-            // ---------------- TEMP -------------------- //
-
-
-
-
-        }
-
-        public Dictionary<string, ScanResult> Scan(IEnumerable<string> hosts, int amount_of_samples)
+         public static IReadOnlyDictionary<string, ScanResult> Scan(IEnumerable<string> hosts, int amount_of_samples)
         {
             var current_scans = new Dictionary<string, Task<ScanResult>>();
 
@@ -101,70 +48,15 @@ namespace PingAlerter.Network
 
             var current_scan_results = new Dictionary<string, ScanResult>();
 
-            foreach(var scan in current_scans)
+            foreach (var scan in current_scans)
                 current_scan_results.Add(scan.Key, scan.Value.Result);
 
             return current_scan_results;
 
         }
 
-        public Thread Monitor(Action<
-            IReadOnlyDictionary<string, ScanResult>, 
-            IReadOnlyDictionary<string, ScanHistory>, 
-            IReadOnlyDictionary<string, ScanHistory>> LatencyFunc,
-            int interval,int amount_of_samples, int amount_of_ping_samples) 
+        private static async Task<ScanResult> PingAddress(string ipaddress, int amount)
         {
-
-            Thread thread = new Thread(() =>
-            {
-                int max_loop_count = amount_of_ping_samples;
-                int loop_count = 0;
-
-                while (true)
-                {
-                    loop_count = (loop_count + 1) % max_loop_count;
-                    Thread.Sleep(interval);
-                    var current_scan_results = Scan(HostScanHistoryOrigin.Keys, amount_of_samples);
-
-
-                    var enuResults = current_scan_results.GetEnumerator();
-                    while (enuResults.MoveNext())
-                    {
-                        KeyValuePair<string, ScanResult> result = enuResults.Current;
-
-                        this.HostScanHistory[result.Key].AddResult(result.Value);
-
-                        Debug.WriteLine("[" + result.Key + "] Avg rtt: " + result.Value.Avg);
-                    }
-
-
-                    if (loop_count == 0)
-                        LatencyFunc(current_scan_results, HostScanHistory, HostScanHistoryOrigin);
-                }
-            });
-
-
-            thread.Start();
-
-            return thread;
-        }
-
-      
-
-
-
-
-
-
-
-
-
-
-
-
-
-        private async Task<ScanResult> PingAddress(string ipaddress,int amount)
-        {            
             ScanResult scan_result = new ScanResult();
             for (int i = 0; i < amount; i++)
             {
@@ -179,16 +71,22 @@ namespace PingAlerter.Network
 
                     Debug.WriteLine("Ping Failed! " + amount);
                 }
-     
+
             }
 
             return scan_result;
         }
 
-        private Task<PingReply> Ping(string ipaddress)
+
+        private static Task<PingReply> Ping(string ipaddress)
         {
             return new Ping().SendPingAsync(ipaddress, 350);
         }
+
+
+
+
+
 
         public static IPAddress GetDefaultGateway()
         {

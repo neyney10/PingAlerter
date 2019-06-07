@@ -1,13 +1,17 @@
-﻿using PingAlerter.Network;
+﻿using PingAlerter.IO.FileSystem;
+using PingAlerter.Network;
 using PingAlerter.Other.Log;
 using PingAlerter.Other.MainWindow;
 using PingAlerter.Other.MonitorConfig;
+using PingAlerter.Other.MonitorTab;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace PingAlerter
@@ -19,14 +23,15 @@ namespace PingAlerter
     {
 
         private System.Media.SoundPlayer player;
-        NetworkTools net;
-        Thread Monitor;
-
+        Thread Monitor; //temp
+        private FileLogger filelogger;
+  
         // Control models and data sources
-        bool StartButtonOn = false;
+        private bool StartButtonOn = false;
 
         // ViewModels //
         MainWindowViewModel mainWindowViewModel; // for general things such as status bar ( should I create a status bar viewModel? )
+        MonitorTabViewModel monitorTabViewModel; // for monitor tab
         MonitorConfigViewModel monitorConfigViewModel; // for Settings tab
         LogViewModel logViewModel; // for Logs tab
 
@@ -40,6 +45,7 @@ namespace PingAlerter
         public void InitClass()
         {
             player = new System.Media.SoundPlayer(@"D:\temp\Programs\Fiddler\LoadScript.wav");
+            filelogger = new FileLogger(@"D:\LogFile.txt");
 
             // General window
             this.DataContext = this;
@@ -47,135 +53,125 @@ namespace PingAlerter
             mainWindowViewModel = new MainWindowViewModel(mainWindowModel);
 
             stbar_label_scansvalue.DataContext = mainWindowViewModel;
-           // Log tab
-            LogModel logModel = new LogModel();
-            logViewModel = new LogViewModel(logModel);
+            // Log tab
+            logViewModel = new LogViewModel();
 
-            listBox_log.DataContext = logViewModel;
+            datagrid_logs.DataContext = logViewModel;
 
-            // Monitor tab
 
 
             // Settings tab
-            MonitorConfigModel monitorModel = new MonitorConfigModel();
+            LatencyMonitorConfig monitorModel = new LatencyMonitorConfig();
             monitorConfigViewModel= new MonitorConfigViewModel(monitorModel);
 
             tab_settings.DataContext = monitorConfigViewModel;
-        }
 
+            // Monitor tab
+            monitorTabViewModel = new MonitorTabViewModel(logViewModel);
 
+            tab_monitor.DataContext = monitorTabViewModel;
 
-        private void btn_start_Click(object sender, RoutedEventArgs e)
-        {
-            Button btn_start = (Button)sender;
-
-            if(StartButtonOn)
+            MonitorObserver o = new MonitorObserver((data)=> 
             {
-                StartButtonOn = false;
-                Monitor.Abort(); // TODO: change it to stop the thread using a boolean or somethin.
-                
-                btn_start.Background = new LinearGradientBrush(Color.FromRgb(25,200,33),Color.FromRgb(0,233,88),1);
-                btn_start.Content = "Start!";
-
-            }
-            else
-            {
-                StartButtonOn = true;
-                net = new NetworkTools();
-
-                string[] addresses = new string[listBox_addresses.Items.Count];
-                for (int i = 0; i < listBox_addresses.Items.Count; i++)
+                switch(data.eventType)
                 {
-                    string address = (string)((ListBoxItem)listBox_addresses.Items[i]).Content;
-
-                    addresses[i] = address;
+                    case MonitorServiceNotify.Type.Log:
+                        logViewModel.AddLog(data.Data);
+                        break;
+                    case MonitorServiceNotify.Type.OverThreshold:
+                        logViewModel.AddLog(data.Data);
+                        player.Play();
+                        break;
                 }
 
+                filelogger.WriteSingle(data.Data);
+                mainWindowViewModel.ScanCount = data.ScanCount;
 
-                net.PreCheck(addresses, 5, 4, 30);
-                Monitor = net.Monitor(Latency, 450, 5, 3);
-
-                btn_start.Background = new SolidColorBrush(Color.FromRgb(200, 25, 25));
-                btn_start.Content = "Stop!";
-            }
-            
-        }
-
-        private void Latency(IReadOnlyDictionary<string, ScanResult> scans, IReadOnlyDictionary<string, ScanHistory> current_history, IReadOnlyDictionary<string, ScanHistory> origin_history)
-        {
-            int overThreshold = 0;
-            foreach (var history in current_history)
-            {
-                overThreshold += !CheckLatency(history.Value, current_history[NetworkTools.DefaultGatewayAddress], monitorConfigViewModel.LatencyThreshold, monitorConfigViewModel.StdDeviationThreshold) ? 1 : 0;
-
-                mainWindowViewModel.ScanCount++;
-
-                logViewModel.AddLog("Ping " + history.Key + " RTT: " + history.Value.Avg);
-            }
-
-            Application.Current.Dispatcher.BeginInvoke((Action)delegate // LATER USE ObservableCollection for this.
-            {
-                listBox_log.Items.Refresh(); 
+                Debug.WriteLine("OBSERVER OF MainWindow, ScanCount: "+ data.ScanCount);
+                
             });
 
-            bool is_router_latency_ok = CheckLatencyToRouter(origin_history, scans[NetworkTools.DefaultGatewayAddress], monitorConfigViewModel.DefGatewayLatencyThreshold);
-            bool is_latency_stable = CheckStability(current_history[NetworkTools.DefaultGatewayAddress], monitorConfigViewModel.DefGatewayStdDeviationThreshold);
+            monitorTabViewModel.Subscribe(o);
 
-            if ((!is_router_latency_ok && !is_latency_stable) || overThreshold > (2.0 / 3.0) * current_history.Count)
-                player.Play();
+            // Experimental tab
+            ExperimentalViewModel experimentalViewModel = new ExperimentalViewModel();
 
-            Debug.WriteLine("Thresh: " + overThreshold + " | Router lat: " + is_router_latency_ok + " | stable: " + is_latency_stable);
+            Btn_experimental.DataContext = experimentalViewModel;
+
+
         }
 
-        // default gateway
-        private bool CheckLatencyToRouter(IReadOnlyDictionary<string, ScanHistory> HostScanHistoryOrigin, ScanResult result, long threshold)
+        private void Window_StateChanged(object sender, EventArgs e)
         {
-            double delta = result.Avg - HostScanHistoryOrigin[NetworkTools.DefaultGatewayAddress].Avg;
-
-            if (delta > threshold)
-                return false;
-
-            return true;
-        }
-
-        // check last result
-        private bool CheckLatency(ScanHistory history, ScanHistory DefaultGatewayHistory, long latency_threshold, long dev_threshold)
-        {
-            double delta = 0;
-            foreach(ScanResult scan in history.Results)
+            switch (this.WindowState)
             {
-                double pure_latency = scan.Avg - DefaultGatewayHistory.Avg;
-                delta += pure_latency - (history.Avg - DefaultGatewayHistory.Avg);
+                case WindowState.Maximized:
+                    // TODO: create sperated method
+                    Hide();
+                    break;
+                case WindowState.Minimized:
+                    MessageBox.Show("Minimized");
+                    break;
+                case WindowState.Normal:
+                    MessageBox.Show("Normal");
+                    break;
             }
-            delta /= history.Results.Count;
-
-            bool is_stable = CheckStability(history, dev_threshold);
-
-            if (delta > latency_threshold || !is_stable)
-                return false;
-
-            return true;
         }
 
-        // check unstable net
-        private bool CheckStability(ScanHistory history, long threshold)
+
+   
+
+        class MonitorObserver : IObserver<MonitorServiceNotify>
         {
-            // ---------------- TEMP -------------------- //
-            List<double> samples = new List<double>();
+            private Action<MonitorServiceNotify> Callback;
 
-            foreach (ScanResult scan in history.Results)
-                samples.Add(scan.Avg);
-            // ---------------- TEMP -------------------- //
+            public MonitorObserver(Action<MonitorServiceNotify> callback)
+            {
+                this.Callback = callback;
+            }
 
-            double std_deviation = Probability.ProbabilityOP.StandardDeviation(samples);
-            Debug.WriteLine("[stabiliy: std_dev: " + std_deviation);
-            if (std_deviation > threshold)
-                return false;
+            public void OnCompleted()
+            {
+                throw new NotImplementedException();
+            }
 
-            return true;
+            public void OnError(Exception error)
+            {
+                throw new NotImplementedException();
+            }
+
+            public void OnNext(MonitorServiceNotify value)
+            {
+                this.Callback(value);
+            }
         }
 
 
+        public class ExperimentalViewModel
+        {
+
+            public ICommand Btn_experimental_OnClick { get; set; }
+
+            public ExperimentalViewModel()
+            {
+                this.Btn_experimental_OnClick = new ExperimentalCommand();
+            }
+
+            public class ExperimentalCommand : ICommand
+            {
+                public event EventHandler CanExecuteChanged;
+
+                public bool CanExecute(object parameter)
+                {
+                    return true;
+                }
+
+                public void Execute(object parameter)
+                {
+                    new Window().Show();
+                }
+            }
+        }
 
     }
 }

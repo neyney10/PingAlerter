@@ -1,13 +1,14 @@
-﻿using System.ComponentModel;
+﻿using PingAlerter.Network;
+using System.ComponentModel;
 
 namespace PingAlerter.Other.MonitorConfig
 {
 
     public class MonitorConfigViewModel : INotifyPropertyChanged
     {
-        private MonitorConfigModel Model;
+        private LatencyMonitorConfig Model;
 
-        public MonitorConfigViewModel(MonitorConfigModel model)
+        public MonitorConfigViewModel(LatencyMonitorConfig model)
         {
             this.Model = model; 
         }
