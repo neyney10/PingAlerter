@@ -38,7 +38,6 @@ namespace PingAlerter.ViewModels
         public LogViewModel logViewModel { get; set; } // for Logs tab
 
 
-
         #region Constructor, dependancy injections and Members setup.
         public MonitorTabControlViewModel()
         {

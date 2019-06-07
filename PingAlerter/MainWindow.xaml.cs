@@ -23,7 +23,7 @@ namespace PingAlerter
     /// </summary>
     public partial class MainWindow : Window
     {
-        MainWindowModel mainWindowViewModel;
+        MainWindowViewModel mainWindowViewModel;
         MonitorTabControlViewModel monitorTabControlViewModel;
 
         public MainWindow()
@@ -41,15 +41,18 @@ namespace PingAlerter
                     mainWindowViewModel.ScanCount = data;
                 }
                 );
+
+            monitorTabControlViewModel.Subscribe(TabControlObserver);
         }
 
         private void InitViewModels()
         {
-            mainWindowViewModel = new MainWindowModel();
+            mainWindowViewModel = new MainWindowViewModel(new MainWindowModel());
             stbar_label_scansvalue.DataContext = mainWindowViewModel;
 
-            monitorTabControlViewModel = new MonitorTabControlViewModel();
+            monitorTabControlViewModel = MonitorTabControl.monitorTabControlViewModel;//new MonitorTabControlViewModel();
             MonitorTabControl.DataContext = monitorTabControlViewModel;
+
         }
 
 

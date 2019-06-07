@@ -30,7 +30,7 @@ namespace PingAlerter.Views
     public partial class MonitorTabControlView : UserControl
     {
 
-        MonitorTabControlViewModel monitorTabControlViewModel;
+        public MonitorTabControlViewModel monitorTabControlViewModel { get; set; }
 
         public MonitorTabControlView()
         {
