@@ -55,18 +55,6 @@ namespace PingAlerter.Network
             }
 
 
-
-            // ---------------- TEMP -------------------- //
-           /* foreach (KeyValuePair<string, ScanHistory> history in HostScanHistoryOrigin)
-            {
-                List<double> samples = new List<double>();
-                foreach (ScanResult scan in history.Value.Results)
-                    samples.Add(scan.Avg);
-                Debug.WriteLine(">> [std dev of " + history.Key + "] " + Probability.ProbabilityOP.StandardDeviation(samples));
-            } */
-            // ---------------- TEMP -------------------- //
-
-
         }
 
         public void StartMonitor(Action<

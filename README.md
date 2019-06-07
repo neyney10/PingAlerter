@@ -12,6 +12,9 @@ the tool also differentiate Latency to router (Wi-Fi) and Latency to remote serv
 
 ## Screenshots
 ### Version 0.15 (Development build)
+![](/Media/1_5screenshot1.png)
+![](/Media/1_5screenshot2.png)
+![](/Media/1_5screenshot3.png)
 ### Version 0.1 (Development build)
 ![](/Media/screenshot1_settings.png)
 ![](/Media/screenshot2_logs.png)

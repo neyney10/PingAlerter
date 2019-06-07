@@ -27,7 +27,11 @@ namespace PingAlerter.Other.MonitorTab
 
         public void StartMonitor(IEnumerable<string> addresses)
         {
-            latencyMonitor.PreCheck(addresses, 5, 4, 30);//TODO
+            latencyMonitor.PreCheck(addresses, // addresses to ping to
+                latencyMonitor.Configuration.PreCheckAmountOfSamples, // amount of cycle/tries/iterations to do, more iterations -> more accuracy, but slower.
+                latencyMonitor.Configuration.PreCheckAmountOfPingsPerSample, // amount of pings per cycle/iteration, more pings -> more accuracy, but slower.
+                30); // amount of time of minimum delay between any two cycles/iterations.
+
             latencyMonitor.StartMonitor(Latency, 355, 3, 3);
         }
 

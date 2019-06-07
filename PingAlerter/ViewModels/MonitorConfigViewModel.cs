@@ -15,6 +15,8 @@ namespace PingAlerter.ViewModels
             this.Model = model; 
         }
 
+        #region Exposing Properties of Model
+
         public int LatencyThreshold
         {
             get => Model.LatencyThreshold;
@@ -39,5 +41,18 @@ namespace PingAlerter.ViewModels
             set { Model.DefGatewayStdDeviationThreshold = value; OnPropertyChanged("DefGatewayStdDeviationThreshold"); }
         }
 
+        public int PreCheckAmountOfSamples
+        {
+            get { return Model.PreCheckAmountOfSamples; }
+            set { Model.PreCheckAmountOfSamples = value; OnPropertyChanged("PreCheckAmountOfSamples"); }
+        }
+
+        public int PreCheckAmountOfPingsPerSample
+        {
+            get { return Model.PreCheckAmountOfPingsPerSample; }
+            set { Model.PreCheckAmountOfPingsPerSample = value; OnPropertyChanged("PreCheckAmountOfPingsPerSample"); }
+        }
+
+        #endregion
     }
 }
