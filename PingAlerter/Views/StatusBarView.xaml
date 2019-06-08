@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:PingAlerter.Views"
              mc:Ignorable="d" MinHeight="25" VerticalAlignment="Bottom" >
     <Grid>
-        <StatusBar  Margin="0" VerticalAlignment="Bottom" Background="#FFFFFFFF" BorderBrush="Black" Grid.ColumnSpan="2" Grid.IsSharedSizeScope="True" Panel.ZIndex="1" VerticalContentAlignment="Bottom" UseLayoutRounding="True" HorizontalContentAlignment="Stretch">
+        <StatusBar  Margin="0" VerticalAlignment="Bottom" Background="#FFFFFFFF" Grid.ColumnSpan="2" Grid.IsSharedSizeScope="True" Panel.ZIndex="1" VerticalContentAlignment="Bottom" UseLayoutRounding="True" HorizontalContentAlignment="Stretch" BorderThickness="1" BorderBrush="#FF778090">
             <Label x:Name="stbar_label_scans" Content="Scans: " Width="42"/>
             <Label x:Name="stbar_label_scansvalue" Content="{Binding ScanCount}" Width="35" Height="25" FontStyle="Italic" VerticalContentAlignment="Center" VerticalAlignment="Center"/>
         </StatusBar>

@@ -5,7 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d"
              DataContext="{Binding MonitorTabViewModel}">
-    <Grid Background="#FFE5E5E5" Margin="0,0,0,0">
+    <Grid Margin="0,0,0,0">
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="#FFE7FFD9" Offset="1"/>
+                <GradientStop Color="White"/>
+            </LinearGradientBrush>
+        </Grid.Background>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="135*"/>
             <ColumnDefinition Width="379*"/>

@@ -32,7 +32,7 @@ namespace PingAlerter.Views
 
         private void InitViewModels()
         {
-            monitorConfigViewModel = new MonitorConfigViewModel(new Network.LatencyMonitorConfig());
+            //monitorConfigViewModel = new MonitorConfigViewModel(new Network.LatencyMonitorConfig());
         }
 
         private void BindViewModels()

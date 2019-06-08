@@ -57,8 +57,28 @@
     <ApplicationIcon>wifiicon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BouncyCastle.Crypto">
+      <HintPath>..\Modules\MySQL\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Protobuf">
+      <HintPath>..\Modules\MySQL\Google.Protobuf.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data">
+      <HintPath>..\Modules\MySQL\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data.EntityFramework">
+      <HintPath>..\Modules\MySQL\MySql.Data.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="MySQL.Data.EntityFrameworkCore.Design">
+      <HintPath>..\Modules\MySQL\MySQL.Data.EntityFrameworkCore.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Web">
+      <HintPath>..\Modules\MySQL\MySql.Web.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
+    <Reference Include="System.Data">
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -81,7 +101,14 @@
     <Compile Include="Common\Observable.cs" />
     <Compile Include="Common\Observer.cs" />
     <Compile Include="Common\RelayCommand.cs" />
+    <Compile Include="IO\Database\DBMySQL.cs" />
+    <Compile Include="IO\Database\DBMySQLLogger.cs" />
+    <Compile Include="IO\Database\IDBConnection.cs" />
     <Compile Include="IO\FileSystem\FileLogger.cs" />
+    <Compile Include="IO\ILogger.cs" />
+    <Compile Include="Models\AlertConfigModel.cs" />
+    <Compile Include="Models\LogConfigModel.cs" />
+    <Compile Include="Models\SettingsModel.cs" />
     <Compile Include="Models\StatusBarModel.cs" />
     <Compile Include="Network\LatencyMonitor.cs" />
     <Compile Include="Network\LatencyMonitorConfig.cs" />
@@ -179,6 +206,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="wifiicon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,5 +1,8 @@
 ﻿using PingAlerter.Common;
+using PingAlerter.IO;
+using PingAlerter.IO.Database;
 using PingAlerter.IO.FileSystem;
+using PingAlerter.Models;
 using PingAlerter.Network;
 using PingAlerter.Other.Log;
 using PingAlerter.Other.MonitorTab;
@@ -8,27 +11,33 @@ namespace PingAlerter.ViewModels
 {
     public class MonitorTabControlViewModel : BaseViewModel<int>
     {
-        private System.Media.SoundPlayer player;
-        private FileLogger filelogger;
+        #region Private Models and data members
+        private AlertConfigModel alertConfig;
+        private LogConfigModel logConfig;
+        //private ILogger DBLogger;
+        #endregion
 
+        #region ViewModels
         // ViewModels //
         public MonitorTabViewModel monitorTabViewModel { get; set; } // for monitor tab
         public MonitorConfigViewModel monitorConfigViewModel { get; set; } // for Settings tab
         public LogViewModel logViewModel { get; set; } // for Logs tab
-
+        #endregion
 
         #region Constructor, dependancy injections and Members setup.
         public MonitorTabControlViewModel()
         {
+            alertConfig = new AlertConfigModel(@"D:\temp\Projects\C#\PingAlerter\PingAlerter\LoadScript.wav");
+            logConfig = new LogConfigModel(@"D:\LogFile.txt");
+            // TEST
+            //DBLogger = new DBMySQLLogger("Server=127.0.0.1;Database=pingalerterlogs;Uid=root;Pwd=toor;");
+
             InitViewModels();
             InitClass();
         }
         
         private void InitClass()
         {
-            player = new System.Media.SoundPlayer(@"D:\temp\Programs\Fiddler\LoadScript.wav");
-            filelogger = new FileLogger(@"D:\LogFile.txt");
-
             Observer<MonitorServiceNotify> o = new Observer<MonitorServiceNotify>(
           (data) =>
           {
@@ -39,11 +48,12 @@ namespace PingAlerter.ViewModels
                       break;
                   case MonitorServiceNotify.Type.OverThreshold:
                       logViewModel.AddLog(data.Data);
-                      player.Play();
+                      if(alertConfig.IsSoundOn)
+                         alertConfig.PlaySound();
                       break;
               }
 
-              filelogger.WriteSingle(data.Data);
+              logConfig.SaveLog(data.Data);
 
               NotifyObservers(data.ScanCount);
 
@@ -55,6 +65,9 @@ namespace PingAlerter.ViewModels
 
         private void InitViewModels()
         {
+            LatencyMonitorConfig monitorConfigModel = new LatencyMonitorConfig();
+            
+            SettingsModel settings = new SettingsModel(monitorConfigModel, alertConfig, logConfig);
 
             #region Log Tab
             // Log tab
@@ -63,13 +76,12 @@ namespace PingAlerter.ViewModels
 
             #region Settings Tab
             // Settings tab
-            LatencyMonitorConfig monitorConfigModel = new LatencyMonitorConfig();
-            monitorConfigViewModel = new MonitorConfigViewModel(monitorConfigModel);
+            monitorConfigViewModel = new MonitorConfigViewModel(settings);
             #endregion
 
             #region Monitor Tab
             // Monitor tab
-            monitorTabViewModel = new MonitorTabViewModel(monitorConfigModel); // notice the same 'monitorConfigModel' object as before in order to synchronize them.
+            monitorTabViewModel = new MonitorTabViewModel(settings.monitorConfig); // notice the same 'settings' object as before in order to synchronize them.
             #endregion
 
             #region Experimental Tab
