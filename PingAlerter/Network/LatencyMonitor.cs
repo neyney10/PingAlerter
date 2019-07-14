@@ -72,7 +72,7 @@ namespace PingAlerter.Network
             while (true)
             {
                 loop_count = (loop_count + 1) % max_loop_count;
-                Thread.Sleep(interval);
+                Thread.Sleep(interval); // TODO: change to timer instead of sleep.
                 var current_scan_results = NetworkTools.Scan(HostScanHistoryOrigin.Keys, amount_of_ping_samples);
 
                 StoreResultsInDictionary(current_scan_results);

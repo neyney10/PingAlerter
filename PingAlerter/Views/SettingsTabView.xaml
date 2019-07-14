@@ -38,6 +38,22 @@
             <Label x:Name="label_Copy11" Content="Log Options:" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" FontWeight="Bold" Margin="0,234,0,0" Foreground="#FF2527D0"/>
             <Label x:Name="label_Copy12" Content="Log Filepath:" HorizontalAlignment="Left" Margin="14,256,0,0" VerticalAlignment="Top" Width="119" RenderTransformOrigin="0.484,0.839"/>
             <TextBox x:Name="txtb_log_flepath" Height="28" Margin="120,255,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="248" Text="{Binding LogFilepath}" Background="#FFE9EFF1" HorizontalAlignment="Left" ScrollViewer.CanContentScroll="True"/>
+            <Button x:Name="btn_AlertSoundFileBrowser" Content="Browse..." HorizontalAlignment="Left" Margin="373,212,-70.4,0" VerticalAlignment="Top" Width="75" Command="{Binding BrowseAlertSoundFLCmd}">
+                <Button.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF7E91F3" Offset="1"/>
+                        <GradientStop Color="#FFC4CBF0"/>
+                    </LinearGradientBrush>
+                </Button.Background>
+            </Button>
+            <Button x:Name="btn_LogFileBrowser" Content="Browse..." HorizontalAlignment="Left" Margin="373,259,-70.4,0" VerticalAlignment="Top" Width="75" Command="{Binding BrowseLogFLCmd}" BorderBrush="#FF464D77">
+                <Button.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF7E91F3" Offset="1"/>
+                        <GradientStop Color="#FFC4CBF0"/>
+                    </LinearGradientBrush>
+                </Button.Background>
+            </Button>
         </Grid>
     </ScrollViewer>
 </UserControl>

@@ -3,6 +3,8 @@ using PingAlerter.Models;
 using PingAlerter.Network;
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Windows.Input;
 
 namespace PingAlerter.ViewModels
 {
@@ -16,7 +18,19 @@ namespace PingAlerter.ViewModels
         #region Constructor
         public MonitorConfigViewModel(SettingsModel settings)
         {
+            // initialize models - dependancy injection.
             this.settings = settings;
+
+            // initialize commands.
+            this.BrowseLogFLCmd = new RelayCommand((obj) => 
+            {
+                LogFilepath = OpenFileDialog();
+            });
+
+            this.BrowseAlertSoundFLCmd = new RelayCommand((obj) =>
+            {
+                SoundFilepath = OpenFileDialog();
+            });
         }
         #endregion
 
@@ -87,5 +101,35 @@ namespace PingAlerter.ViewModels
         #endregion
 
         #endregion
+
+        #region Commands
+
+        public ICommand BrowseLogFLCmd { get; set; }
+        public ICommand BrowseAlertSoundFLCmd { get; set; }
+
+        #endregion
+
+        public string OpenFileDialog()
+        {
+            #region Debug logging
+            Debug.WriteLine("Opening File Location Browser... (Command)");
+            #endregion
+
+            var openFileDialog = new Microsoft.Win32.OpenFileDialog();
+            openFileDialog.CheckFileExists = false;
+            bool? result = openFileDialog.ShowDialog();
+
+            // on success: user chose a file location + name.
+            if (result == true)
+            {
+                #region Debug logging
+                Debug.WriteLine("FileLocation: " + openFileDialog.FileName + " (Command)");
+                #endregion
+
+                return openFileDialog.FileName;
+            }
+
+            return null;
+        }
     }
 }

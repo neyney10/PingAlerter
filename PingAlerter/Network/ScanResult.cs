@@ -9,8 +9,16 @@ namespace PingAlerter.Network
 {
     public class ScanResult
     {
+        /// <summary>
+        /// List of ping replies in the scan.
+        /// </summary>
         public List<PingReply> Replies { get; protected set; }
-        public int Failed { get; set; }
+
+        /// <summary>
+        /// Amount of failed pings (unreachable and such).
+        /// </summary>
+        public int Failed { get; set; } 
+
         public long Avg { get { return (Replies.Count - Failed > 0)?  Sum / (Replies.Count-Failed): -1; } }
         public long Max { get; set; }
         public long Min { get; set; }

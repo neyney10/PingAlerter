@@ -64,7 +64,7 @@ namespace PingAlerter.Other.MonitorTab
 
         // default gateway
         private bool CheckLatencyToRouter(IReadOnlyDictionary<string, ScanHistory> HostScanHistoryOrigin, ScanResult result, long threshold)
-        {
+        {   
             double delta = result.Avg - HostScanHistoryOrigin[NetworkTools.DefaultGatewayAddress].Avg;
 
             if (delta > threshold)
@@ -77,16 +77,19 @@ namespace PingAlerter.Other.MonitorTab
         private bool CheckLatency(ScanHistory history, ScanHistory DefaultGatewayHistory, long latency_threshold, long dev_threshold)
         {
             double delta = 0;
+            int amount_of_ping_failures = 0;
             foreach (ScanResult scan in history.Results)
             {
                 double pure_latency = scan.Avg - DefaultGatewayHistory.Avg;
                 delta += pure_latency - (history.Avg - DefaultGatewayHistory.Avg);
+                amount_of_ping_failures += scan.Failed;
             }
+
             delta /= history.Results.Count;
 
             bool is_stable = CheckStability(history, dev_threshold);
 
-            if (delta > latency_threshold || !is_stable)
+            if (delta > latency_threshold || !is_stable || amount_of_ping_failures > 1)
                 return false;
 
             return true;
