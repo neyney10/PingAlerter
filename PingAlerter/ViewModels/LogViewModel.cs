@@ -9,7 +9,9 @@ using System.Windows;
 
 namespace PingAlerter.ViewModels
 {
-
+    /// <summary>
+    /// ViewModel of LogData model class.
+    /// </summary>
     public class LogViewModel
     {
         ObservableCollection<LogData> logs;

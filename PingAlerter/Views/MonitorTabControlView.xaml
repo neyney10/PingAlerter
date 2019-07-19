@@ -23,6 +23,9 @@
             </TabItem.Background>
             <Views:SettingsTabView DataContext="{Binding monitorConfigViewModel}"/>
         </TabItem>
+        <TabItem x:Name="tab_about" Header="About" Height="22" Margin="0" VerticalAlignment="Top" Grid.IsSharedSizeScope="True">
+            <Views:AboutTabView DataContext="{Binding aboutViewModel}"/>
+        </TabItem>
         <TabItem x:Name="tab_experimental" BorderBrush="#FFB08521" Header="Experimental" Margin="0" Grid.IsSharedSizeScope="True">
             <TabItem.Background>
                 <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
@@ -43,6 +46,7 @@
             </Grid>
 
         </TabItem>
+
     </TabControl>
 
 </UserControl>

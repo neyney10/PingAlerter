@@ -82,7 +82,7 @@ namespace PingAlerter.Other.MonitorTab
             {
                 double pure_latency = scan.Avg - DefaultGatewayHistory.Avg;
                 delta += pure_latency - (history.Avg - DefaultGatewayHistory.Avg);
-                amount_of_ping_failures += scan.Failed;
+                amount_of_ping_failures += scan.Failed-history.Results.First().Failed;
             }
 
             delta /= history.Results.Count;

@@ -79,6 +79,9 @@
     <Reference Include="System.Data">
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.RegularExpressions" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -104,8 +107,10 @@
     <Compile Include="IO\Database\DBMySQL.cs" />
     <Compile Include="IO\Database\DBMySQLLogger.cs" />
     <Compile Include="IO\Database\IDBConnection.cs" />
+    <Compile Include="IO\FileSystem\AddressParser.cs" />
     <Compile Include="IO\FileSystem\FileLogger.cs" />
     <Compile Include="IO\ILogger.cs" />
+    <Compile Include="Models\AboutModel.cs" />
     <Compile Include="Models\AlertConfigModel.cs" />
     <Compile Include="Models\LogConfigModel.cs" />
     <Compile Include="Models\SettingsModel.cs" />
@@ -114,12 +119,16 @@
     <Compile Include="Network\LatencyMonitorConfig.cs" />
     <Compile Include="Other\Log\LogData.cs" />
     <Compile Include="Models\LogModel.cs" />
+    <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\LogViewModel.cs" />
     <Compile Include="Models\MainWindowModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\MonitorConfigViewModel.cs" />
     <Compile Include="ViewModels\MonitorTabControlViewModel.cs" />
     <Compile Include="ViewModels\StatusBarViewModel.cs" />
+    <Compile Include="Views\AboutTabView.xaml.cs">
+      <DependentUpon>AboutTabView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\LogsTabView.xaml.cs">
       <DependentUpon>LogsTabView.xaml</DependentUpon>
     </Compile>
@@ -146,6 +155,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\AboutTabView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\LogsTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

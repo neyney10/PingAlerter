@@ -21,6 +21,7 @@ namespace PingAlerter.ViewModels
         // ViewModels //
         public MonitorTabViewModel monitorTabViewModel { get; set; } // for monitor tab
         public MonitorConfigViewModel monitorConfigViewModel { get; set; } // for Settings tab
+        public AboutViewModel aboutViewModel { get; set; } // for About tab
         public LogViewModel logViewModel { get; set; } // for Logs tab
         #endregion
 
@@ -82,6 +83,11 @@ namespace PingAlerter.ViewModels
             #region Monitor Tab
             // Monitor tab
             monitorTabViewModel = new MonitorTabViewModel(settings.monitorConfig); // notice the same 'settings' object as before in order to synchronize them.
+            #endregion
+
+            #region About Tab
+            // About tab
+            this.aboutViewModel = new AboutViewModel();
             #endregion
 
             #region Experimental Tab

@@ -8,7 +8,6 @@ using System.Windows.Input;
 
 namespace PingAlerter.ViewModels
 {
-
     public class MonitorConfigViewModel : BaseViewModel<Object>
     {
         #region Models

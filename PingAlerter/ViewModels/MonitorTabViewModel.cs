@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.Win32;
 using PingAlerter.Common;
 using PingAlerter.IO.FileSystem;
 using PingAlerter.Models;
@@ -7,6 +8,7 @@ using PingAlerter.Other.Log;
 using PingAlerter.Other.MonitorTab;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -32,7 +34,9 @@ namespace PingAlerter.ViewModels
         public string txtb_newAddress { get { return Model.txtb_newAddress; } set { this.Model.txtb_newAddress = value; } }
 
         // this ViewModel interaction logic
-        public StartLatencyMonitorCommand startLatencyMonitorCommand { get; set; }
+        public ICommand startLatencyMonitorCommand { get; set; }
+        public ICommand AddNewAddressCommand { get; set; }
+        public ICommand AddNewAddressFromFileCommand { get; set; }
         private Brush btnStartBackgroundColor;
         public Brush BtnStartBackgroundColor
         {
@@ -46,6 +50,8 @@ namespace PingAlerter.ViewModels
             get { return this.btnStartContent; }
             set { this.btnStartContent = value; OnPropertyChanged("BtnStartContent"); }
         }
+
+        
 
 
         // Temp data members
@@ -67,6 +73,21 @@ namespace PingAlerter.ViewModels
                 (data) => { NotifyObservers(data); });
 
             this.startLatencyMonitorCommand = new StartLatencyMonitorCommand(this.Model.Addresses, this);
+
+            this.AddNewAddressCommand = new RelayCommand((obj) => {
+                AddNewAddress(txtb_newAddress);
+
+            });
+
+            this.AddNewAddressFromFileCommand = new RelayCommand((obj) =>
+            {
+                OpenFileDialog ofd = new OpenFileDialog();
+                
+                bool? result = ofd.ShowDialog();
+
+                if (result == true)
+                    AddMultipleNewAddresses(AddressParser.Parse(ofd.FileName)); 
+            });
 
 
             Init();
@@ -150,7 +171,17 @@ namespace PingAlerter.ViewModels
             }
         }
 
+        private void AddNewAddress(string address)
+        {  
+            if(!this.Model.Addresses.Contains(address))
+                // if the list does not have this address already, add it to the list (do not store duplicated values).
+                this.Model.Addresses.Add(address);
+        }
 
-
+        private void AddMultipleNewAddresses(IEnumerable<string> address_list)
+        {
+            foreach (string address in address_list)
+                AddNewAddress(address);
+        }
     }
 }

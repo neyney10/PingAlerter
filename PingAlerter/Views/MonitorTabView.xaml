@@ -17,7 +17,7 @@
             <ColumnDefinition Width="379*"/>
         </Grid.ColumnDefinitions>
         <Button x:Name="btn_start" Content="{Binding BtnStartContent}" Margin="117,0,0,5.2" VerticalAlignment="Bottom"  Height="49" FontSize="36" FontWeight="Bold" Cursor="Hand" BorderBrush="#FF656566" Grid.ColumnSpan="2" Background="{Binding BtnStartBackgroundColor}" Command="{Binding startLatencyMonitorCommand}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-        <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="23" Margin="128,21,0,0" TextWrapping="Wrap" Text="{Binding txtb_newAddress}" VerticalAlignment="Top" Width="120" Grid.ColumnSpan="2" />
+        <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="23" Margin="117,21,0,0" TextWrapping="Wrap" Text="{Binding txtb_newAddress}" VerticalAlignment="Top" Width="120" Grid.ColumnSpan="2" />
         <ListBox x:Name="listBox_addresses" HorizontalAlignment="Left" Margin="0" ItemsSource="{Binding Addresses}" MinHeight="265" MinWidth="112" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" Grid.IsSharedSizeScope="True" UseLayoutRounding="False">
             <ListBox.Background>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -26,5 +26,22 @@
                 </LinearGradientBrush>
             </ListBox.Background>
         </ListBox>
+        <Button x:Name="btn_AddNewAddress" Grid.ColumnSpan="2" Content="Add to address List" HorizontalAlignment="Left" Margin="117,49,0,0" VerticalAlignment="Top" Width="120" Command="{Binding AddNewAddressCommand}">
+            <Button.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FFA3EA77" Offset="0.926"/>
+                    <GradientStop Color="#FFDDF7D3" Offset="0.199"/>
+                </LinearGradientBrush>
+            </Button.Background>
+        </Button>
+        <Label x:Name="lbl_AddNewAddress" Content="Add another host/address to monitor" HorizontalAlignment="Left" Margin="112,0,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+        <Button x:Name="btn_AddNewAddressFromFile" Grid.ColumnSpan="2" Content="from file" HorizontalAlignment="Left" Margin="117,71,0,0" VerticalAlignment="Top" Width="120" Command="{Binding AddNewAddressFromFileCommand}">
+            <Button.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FFA3EA77" Offset="0.926"/>
+                    <GradientStop Color="#FFDDF7D3" Offset="0.199"/>
+                </LinearGradientBrush>
+            </Button.Background>
+        </Button>
     </Grid>
 </UserControl>

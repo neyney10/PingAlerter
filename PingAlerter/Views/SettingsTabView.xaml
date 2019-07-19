@@ -14,7 +14,7 @@
                     <GradientStop Color="White"/>
                 </LinearGradientBrush>
             </Grid.Background>
-            <TextBox x:Name="txtb_lat_thresh" HorizontalAlignment="Left" Height="23" Margin="120,23,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" Text="{Binding LatencyThreshold}"/>
+            <TextBox x:Name="txtb_lat_thresh" HorizontalAlignment="Left" Height="23" Margin="120,23,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" Text="{Binding LatencyThreshold}" Background="White"/>
             <Label x:Name="label" Content="Latency Threshold:" HorizontalAlignment="Left" Margin="10,20,0,0" VerticalAlignment="Top" Width="119"/>
             <Label x:Name="label_Copy" Content="Stability Threshold:" HorizontalAlignment="Left" Margin="10,46,0,0" VerticalAlignment="Top" Width="119"/>
             <Label x:Name="label_Copy1" Content="" HorizontalAlignment="Left" Margin="10,77,0,0" VerticalAlignment="Top" Width="119"/>
