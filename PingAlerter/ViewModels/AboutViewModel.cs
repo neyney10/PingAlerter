@@ -44,8 +44,8 @@ namespace PingAlerter.ViewModels
         public AboutViewModel()
         {
             this.AboutModel = new AboutModel(
-                "1.0.0",
-                "Beta (Development)", 
+                "0.17",
+                "Alpha (Development)", 
                 "19/07/2019",
                 @"https://github.com/neyney10/PingAlerter", 
                 "Neyney10"

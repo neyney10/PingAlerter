@@ -4,21 +4,15 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d"
-             DataContext="{Binding MonitorTabViewModel}">
-    <Grid Margin="0,0,0,0">
-        <Grid.Background>
+             DataContext="{Binding MonitorTabViewModel}" Name="UC" Style="{StaticResource ResponsiveTextUI}">
+    <DockPanel>
+        <DockPanel.Background>
             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                 <GradientStop Color="#FFE7FFD9" Offset="1"/>
                 <GradientStop Color="White"/>
             </LinearGradientBrush>
-        </Grid.Background>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="135*"/>
-            <ColumnDefinition Width="379*"/>
-        </Grid.ColumnDefinitions>
-        <Button x:Name="btn_start" Content="{Binding BtnStartContent}" Margin="117,0,0,5.2" VerticalAlignment="Bottom"  Height="49" FontSize="36" FontWeight="Bold" Cursor="Hand" BorderBrush="#FF656566" Grid.ColumnSpan="2" Background="{Binding BtnStartBackgroundColor}" Command="{Binding startLatencyMonitorCommand}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-        <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="23" Margin="117,21,0,0" TextWrapping="Wrap" Text="{Binding txtb_newAddress}" VerticalAlignment="Top" Width="120" Grid.ColumnSpan="2" />
-        <ListBox x:Name="listBox_addresses" HorizontalAlignment="Left" Margin="0" ItemsSource="{Binding Addresses}" MinHeight="265" MinWidth="112" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" Grid.IsSharedSizeScope="True" UseLayoutRounding="False">
+        </DockPanel.Background>
+        <ListBox x:Name="listBox_addresses" HorizontalAlignment="Left" DockPanel.Dock="Left" ItemsSource="{Binding Addresses}" MinHeight="265" MinWidth="112" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" Grid.IsSharedSizeScope="True" UseLayoutRounding="False">
             <ListBox.Background>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="#FFE0DAEE" Offset="0.981"/>
@@ -26,7 +20,10 @@
                 </LinearGradientBrush>
             </ListBox.Background>
         </ListBox>
-        <Button x:Name="btn_AddNewAddress" Grid.ColumnSpan="2" Content="Add to address List" HorizontalAlignment="Left" Margin="117,49,0,0" VerticalAlignment="Top" Width="120" Command="{Binding AddNewAddressCommand}">
+        <DockPanel LastChildFill="False" DockPanel.Dock="Left">
+            <Label x:Name="lbl_AddNewAddress" Content="Add another host/address to monitor" DockPanel.Dock="Top" />
+            <TextBox x:Name="textBox" HorizontalAlignment="Left" Margin="5,0,0,0" MinHeight="23" MinWidth="120"  DockPanel.Dock="Top" TextWrapping="Wrap" Text="{Binding txtb_newAddress}" />
+            <Button x:Name="btn_AddNewAddress" Content="Add to address List" Margin="5,5,0,0" MinHeight="23" MinWidth="120" HorizontalAlignment="Left" DockPanel.Dock="Top"  Command="{Binding AddNewAddressCommand}">
             <Button.Background>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="#FFA3EA77" Offset="0.926"/>
@@ -34,8 +31,7 @@
                 </LinearGradientBrush>
             </Button.Background>
         </Button>
-        <Label x:Name="lbl_AddNewAddress" Content="Add another host/address to monitor" HorizontalAlignment="Left" Margin="112,0,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
-        <Button x:Name="btn_AddNewAddressFromFile" Grid.ColumnSpan="2" Content="from file" HorizontalAlignment="Left" Margin="117,71,0,0" VerticalAlignment="Top" Width="120" Command="{Binding AddNewAddressFromFileCommand}">
+            <Button x:Name="btn_AddNewAddressFromFile" Margin="5,5,0,0" Content="from file" HorizontalAlignment="Left" DockPanel.Dock="Top"  MinWidth="120" Command="{Binding AddNewAddressFromFileCommand}">
             <Button.Background>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="#FFA3EA77" Offset="0.926"/>
@@ -43,5 +39,7 @@
                 </LinearGradientBrush>
             </Button.Background>
         </Button>
-    </Grid>
+            <Button x:Name="btn_start" Content="{Binding BtnStartContent}"  DockPanel.Dock="Bottom" Height="49" FontSize="36" FontWeight="Bold" Cursor="Hand" BorderBrush="#FF656566"  Background="{Binding BtnStartBackgroundColor}" Command="{Binding startLatencyMonitorCommand}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        </DockPanel>
+    </DockPanel>
 </UserControl>

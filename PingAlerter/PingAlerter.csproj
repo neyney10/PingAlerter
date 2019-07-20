@@ -101,6 +101,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Common\BaseViewModel.cs" />
+    <Compile Include="Common\Converters\IsEqualOrGreaterThanConverter.cs" />
     <Compile Include="Common\Observable.cs" />
     <Compile Include="Common\Observer.cs" />
     <Compile Include="Common\RelayCommand.cs" />

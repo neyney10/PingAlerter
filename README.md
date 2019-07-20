@@ -39,8 +39,8 @@ the tool also differentiate Latency to router (Wi-Fi) and Latency to remote serv
     - Ping Amount: each sample pings multiple times all hosts in its list, this value indicated how many times each sample pings.
 - Alert Options.
     - Make Sound: pretty self explantory.
-    - Alert Sound (.wav): a path to a sound (.wav) file to paly when an alert is raised.
-- Log Options: logging scans to file or database (currnetly only supprts file)
+    - Alert Sound (.wav): a path to a sound (.wav) file to play when an alert is raised.
+- Log Options: logging scans to file or database (currently only supports file)
     - Log Filepath: a txt filepath to save/append logs, does not overwrite on new monitoring sessions.
 ## Dependencies and requirements
 

@@ -5,24 +5,33 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PingAlerter.Views"
              mc:Ignorable="d" 
-             DataContext="{Binding AboutViewModel}">
-    <Grid>
-        <Grid.Background>
+             DataContext="{Binding AboutViewModel}" Name="UC" Style="{StaticResource ResponsiveTextUI}">
+    <StackPanel Orientation="Vertical">
+        <StackPanel.Background>
             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                 <GradientStop Color="#FFE2F0EC" Offset="0"/>
                 <GradientStop Color="#FF8FEBD6" Offset="1"/>
             </LinearGradientBrush>
-        </Grid.Background>
-        <Label x:Name="lbl_vernum" Content="Version Number:" Margin="0" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold" Background="{x:Null}"/>
-        <Label x:Name="lbl_vertype" Content="Version Type:" HorizontalAlignment="Left" Margin="0,22,0,-19.2" VerticalAlignment="Top" FontWeight="Bold" Background="{x:Null}"/>
-        <Label x:Name="lbl_vertime" Content="Version TimeStamp (Date):" HorizontalAlignment="Left" Margin="0,48,0,-44.2" VerticalAlignment="Top" FontWeight="Bold" Background="{x:Null}"/>
-        <Label x:Name="lbl_verwebsite" Content="Project's Website URL:" HorizontalAlignment="Left" Margin="0,74,-0.2,-69.4" VerticalAlignment="Top" FontWeight="Bold" Background="{x:Null}"/>
-        <Label x:Name="lbl_author" Content="Author/Creator:" HorizontalAlignment="Left" Margin="0,100,0,-94.6" VerticalAlignment="Top" FontWeight="Bold" Background="{x:Null}"/>
-        <Label x:Name="lbl_vernum_value" Content="{Binding VersionNumber}" Margin="104,0,-54.2,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <Label x:Name="lbl_vertype_value" Content="{Binding VersionType}" HorizontalAlignment="Left" Margin="85,22,-3.4,-16.8" VerticalAlignment="Top" Background="{x:Null}"/>
-        <Label x:Name="lbl_vertime_value" Content="{Binding VersionTimeStamp}" HorizontalAlignment="Left" Margin="162,48,-161.4,-42.8" VerticalAlignment="Top" Background="{x:Null}"/>
-        <Label x:Name="lbl_verwebsite_value" Content="{Binding WebsiteURL}" HorizontalAlignment="Left" Margin="136,74,-110.4,-68.8" VerticalAlignment="Top"  Background="{x:Null}"/>
-        <Label x:Name="lbl_author_value" Content="{Binding Author}" HorizontalAlignment="Left" Margin="101,100,-40.4,-93.8" VerticalAlignment="Top"  Background="{x:Null}"/>
-
-    </Grid>
+        </StackPanel.Background>
+        <StackPanel Orientation="Horizontal">
+            <Label x:Name="lbl_vernum" Content="Version Number:" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold" Background="{x:Null}"/>
+            <Label x:Name="lbl_vernum_value" Content="{Binding VersionNumber}"  HorizontalAlignment="Left" VerticalAlignment="Top"/>
+         </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <Label x:Name="lbl_vertype" Content="Version Type:" HorizontalAlignment="Left"  VerticalAlignment="Top" FontWeight="Bold" Background="{x:Null}"/>
+            <Label x:Name="lbl_vertype_value" Content="{Binding VersionType}" HorizontalAlignment="Left"  VerticalAlignment="Top" Background="{x:Null}"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <Label x:Name="lbl_vertime" Content="Version TimeStamp (Date):" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold" Background="{x:Null}"/>
+            <Label x:Name="lbl_vertime_value" Content="{Binding VersionTimeStamp}" HorizontalAlignment="Left"  VerticalAlignment="Top" Background="{x:Null}"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <Label x:Name="lbl_verwebsite" Content="Project's Website URL:" HorizontalAlignment="Left"  VerticalAlignment="Top" FontWeight="Bold" Background="{x:Null}"/>
+            <Label x:Name="lbl_verwebsite_value" Content="{Binding WebsiteURL}" HorizontalAlignment="Left"  VerticalAlignment="Top"  Background="{x:Null}"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <Label x:Name="lbl_author" Content="Author/Creator:" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold" Background="{x:Null}"/>
+            <Label x:Name="lbl_author_value" Content="{Binding Author}" HorizontalAlignment="Left"  VerticalAlignment="Top"  Background="{x:Null}"/>
+        </StackPanel>
+    </StackPanel>
 </UserControl>

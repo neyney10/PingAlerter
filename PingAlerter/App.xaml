@@ -1,6 +1,30 @@
-﻿<Application x:Class="PingAlerter.App" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:local="clr-namespace:PingAlerter" StartupUri="MainWindow.xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" d1p1:Ignorable="d" xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006">
+﻿<Application x:Class="PingAlerter.App" 
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+             xmlns:local="clr-namespace:PingAlerter" StartupUri="MainWindow.xaml" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:converters="clr-namespace:PingAlerter.Common.Converters"
+             d1p1:Ignorable="d" 
+             xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006">
   <Application.Resources>
-    <ResourceDictionary>
-    </ResourceDictionary>
+        <ResourceDictionary>
+            <converters:IsEqualOrGreaterThanConverter x:Key="IsEqualOrGreaterThanConverter"/>
+            <Style x:Key="ResponsiveTextUI" TargetType="UserControl">
+                <Style.Triggers>
+                    <DataTrigger Value="True" 
+                         Binding="{Binding ActualHeight, ElementName=UC, 
+                         Converter={StaticResource IsEqualOrGreaterThanConverter}, 
+                         ConverterParameter=400}">
+                        <Setter Property="FontSize" Value="14"/>
+                    </DataTrigger>
+                    <DataTrigger Value="True" 
+                         Binding="{Binding ActualHeight, ElementName=UC, 
+                         Converter={StaticResource IsEqualOrGreaterThanConverter}, 
+                         ConverterParameter=724}">
+                        <Setter Property="FontSize" Value="18"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
   </Application.Resources>
 </Application>
