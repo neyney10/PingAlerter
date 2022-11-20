@@ -41,15 +41,28 @@ namespace PingAlerter.ViewModels
 
         #endregion
 
-        public AboutViewModel()
+        #region Constructors
+
+        /// <summary>
+        /// Default Constructor with default values for the model.
+        /// </summary>
+        public AboutViewModel() : this(new AboutModel(
+            "0.20", 
+            "Alpha (Release)", 
+            "20/11/2022", 
+            @"https://github.com/neyney10/PingAlerter",
+            "Neyney10"))
+        { }
+
+        /// <summary>
+        /// Constructor with Dependency injection of the model.
+        /// </summary>
+        public AboutViewModel(AboutModel model)
         {
-            this.AboutModel = new AboutModel(
-                "0.17",
-                "Alpha (Development)", 
-                "19/07/2019",
-                @"https://github.com/neyney10/PingAlerter", 
-                "Neyney10"
-                );
+            // Set values for dependency injection, models and such.
+            this.AboutModel = model;
         }
+
+        #endregion
     }
 }

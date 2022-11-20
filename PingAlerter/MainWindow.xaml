@@ -7,18 +7,27 @@
         xmlns:System="clr-namespace:System;assembly=mscorlib"
         xmlns:Views="clr-namespace:PingAlerter.Views"
         x:Class="PingAlerter.MainWindow"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="14"
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto"        
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
         mc:Ignorable="d"
         StateChanged="Window_StateChanged"
-        Title="PingAlerter" Height="350" Width="525" ResizeMode="CanResizeWithGrip" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" MinHeight="92">
+        Title="PingAlerter" Height="350" Width="525" ResizeMode="CanResizeWithGrip" 
+        HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" MinHeight="92">
+
+    
     <Grid UseLayoutRounding="True" Grid.IsSharedSizeScope="True">
         <Grid.RowDefinitions>
-            <RowDefinition Height="9*"/>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
 
-        <Views:MonitorTabControlView DataContext="{Binding monitorTabControlViewModel}" x:Name="MonitorTabControl" Grid.Row="0"  Margin="0,0,0.4,0.4" Grid.IsSharedSizeScope="True" Grid.ColumnSpan="2"/>
-
-        <Views:StatusBarView DataContext="{Binding statusBarViewModel}"   Grid.RowSpan="2" VerticalAlignment="Bottom"/>
-
+        <Views:MonitorTabControlView DataContext="{Binding monitorTabControlViewModel}" x:Name="MonitorTabControl" Grid.Row="0"   Grid.IsSharedSizeScope="True" Grid.ColumnSpan="2"/>
+        <Views:StatusBarView DataContext="{Binding statusBarViewModel}" Grid.RowSpan="2" VerticalAlignment="Bottom"/>
     </Grid>
 </Window>

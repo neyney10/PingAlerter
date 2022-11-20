@@ -14,6 +14,7 @@ namespace PingAlerter.IO.Database
         void Disconnect();
         bool IsConnected();
         IDataReader Retrieve(string query); //Query
-        bool Store(string query); //Query.
+        bool Store(string query); //Command.
+        void StoreTransaction(IEnumerable<string> queries);
     }
 }

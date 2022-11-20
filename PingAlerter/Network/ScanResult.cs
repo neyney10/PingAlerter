@@ -34,7 +34,7 @@ namespace PingAlerter.Network
             else
             {
                this.Sum += pr.RoundtripTime;
-               this.Max = (pr.RoundtripTime > this.Max)? pr.RoundtripTime : this.Max;
+               this.Max = (pr.RoundtripTime > this.Max) ? pr.RoundtripTime : this.Max;
                this.Min = (pr.RoundtripTime < this.Max) ? pr.RoundtripTime : this.Max;
             }
 

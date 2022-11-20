@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
+using PingAlerter.Network;
 using PingAlerter.Other.Log;
 
 namespace PingAlerter.IO.FileSystem
@@ -56,32 +58,25 @@ namespace PingAlerter.IO.FileSystem
             throw new NotImplementedException();
         }
 
-        public void SaveLog(LogData log)
+        public void SaveLog(Scan scan)
         {
-            WriteSingle(log);
+            WriteSingle(scan.ToLog().ToJson().ToJsonString());
         }
 
-        public IEnumerable<LogData> ReadLogs()
+        public IReadOnlyCollection<ScanLog> ReadLogs()
         {
-            List<LogData> logs = new List<LogData>();
+            List<ScanLog> logs = new List<ScanLog>();
 
             IEnumerable<string> lines = Read();
 
-            // convert from lines of string to lines of LogData
+            // convert from lines of string to lines of Logs
             foreach(string line in lines)
             {
-                int timestampEnd = line.LastIndexOf(":");
-                int tagEnd = line.IndexOf("]");
-                int addressEnd = line.IndexOf(",");
-
-                // TODO: create a class/function which parses it.
-                LogData log = new LogData(
-                    DateTime.Parse(line.Substring(0, timestampEnd)),
-                    line.Substring(timestampEnd+1,tagEnd - timestampEnd ),
-                    line.Substring(tagEnd+1,addressEnd-tagEnd-1),
-                    line.Substring(addressEnd+1,line.Length-addressEnd-1));
-
-                logs.Add(log);
+                logs.Add(
+                    ScanLog.FromJson(
+                        JsonNode.Parse(line)
+                    )
+                );
             }
 
             return logs;

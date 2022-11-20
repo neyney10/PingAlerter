@@ -1,4 +1,5 @@
 ﻿using PingAlerter.Common;
+using PingAlerter.Common.State;
 using PingAlerter.IO.FileSystem;
 using PingAlerter.Network;
 using PingAlerter.Other.Log;
@@ -15,8 +16,7 @@ namespace PingAlerter.Other.MonitorTab
 {
     class MonitorService : Observable<MonitorServiceNotify>
     {
-        private LatencyMonitor latencyMonitor;
-
+        private readonly LatencyMonitor latencyMonitor;
         private int ScanCount = 0;
 
 
@@ -27,6 +27,8 @@ namespace PingAlerter.Other.MonitorTab
 
         public void StartMonitor(IEnumerable<string> addresses)
         {
+            State.Scans.Clear();
+
             latencyMonitor.PreCheck(addresses, // addresses to ping to
                 latencyMonitor.Configuration.PreCheckAmountOfSamples, // amount of cycle/tries/iterations to do, more iterations -> more accuracy, but slower.
                 latencyMonitor.Configuration.PreCheckAmountOfPingsPerSample, // amount of pings per cycle/iteration, more pings -> more accuracy, but slower.
@@ -36,28 +38,31 @@ namespace PingAlerter.Other.MonitorTab
         }
 
 
-        private void Latency(IReadOnlyDictionary<string, ScanResult> scans, IReadOnlyDictionary<string, ScanHistory> current_history, IReadOnlyDictionary<string, ScanHistory> origin_history)
+        private void Latency(
+            IReadOnlyDictionary<string, ScanResult> scanResults, 
+            IReadOnlyDictionary<string, ScanHistory> current_history, 
+            IReadOnlyDictionary<string, ScanHistory> origin_history)
         {
             int overThreshold = 0;
             foreach (var history in current_history)
             {
                 overThreshold += !CheckLatency(history.Value, current_history[NetworkTools.DefaultGatewayAddress], latencyMonitor.Configuration.LatencyThreshold, latencyMonitor.Configuration.StdDeviationThreshold) ? 1 : 0;
-
-                LogData logtext = new LogData(DateTime.Now, "Ping", history.Key, history.Value.Avg.ToString());
-
-                NotifyObservers(new MonitorServiceNotify(logtext, ScanCount,MonitorServiceNotify.Type.Log));
             }
 
 
-            bool is_router_latency_ok = CheckLatencyToRouter(origin_history, scans[NetworkTools.DefaultGatewayAddress], latencyMonitor.Configuration.DefGatewayLatencyThreshold);
+            bool is_router_latency_ok = CheckLatencyToRouter(origin_history, scanResults[NetworkTools.DefaultGatewayAddress], latencyMonitor.Configuration.DefGatewayLatencyThreshold);
             bool is_latency_stable = CheckStability(current_history[NetworkTools.DefaultGatewayAddress], latencyMonitor.Configuration.DefGatewayStdDeviationThreshold);
+            List<ScanAlert> alerts = new List<ScanAlert>();
 
             if ((!is_router_latency_ok && !is_latency_stable) || overThreshold > (2.0 / 3.0) * current_history.Count)
             {
-                LogData logtext = new LogData(DateTime.Now, "Alert", "Lag Spike", "W.I.P");
-                NotifyObservers(new MonitorServiceNotify(logtext, ScanCount, MonitorServiceNotify.Type.OverThreshold));
+                alerts.Add(new ScanAlert(ScanAlert.AlertType.Spike));
             }
 
+            Scan scan = new Scan(DateTime.Now, this.latencyMonitor.Configuration, scanResults, alerts);
+            State.Scans.Add(scan);
+            NotifyObservers(new MonitorServiceNotify(scan));
+            
             ScanCount++;
             Debug.WriteLine("Thresh: " + overThreshold + " | Router lat: " + is_router_latency_ok + " | stable: " + is_latency_stable);
         }
@@ -113,6 +118,5 @@ namespace PingAlerter.Other.MonitorTab
             return true;
         }
 
-        
     }
 }

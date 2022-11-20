@@ -1,0 +1,28 @@
+﻿<Window x:Class="PingAlerter.Views.OverlayWindowView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PingAlerter.Views"
+        mc:Ignorable="d"
+        Title="OverlayWindowView" Height="55" Width="55" AllowsTransparency="True" WindowStyle="None" Topmost="True" >
+    <Window.Background>
+        <SolidColorBrush Opacity="{Binding Opacity}" Color="{Binding StatusColor}"/>
+
+    </Window.Background>
+    <WindowChrome.WindowChrome>
+        <WindowChrome     
+        CaptionHeight="4"  
+        CornerRadius ="15"
+        ResizeBorderThickness="6"         
+        GlassFrameThickness="0">
+        </WindowChrome>
+        
+        
+    </WindowChrome.WindowChrome>
+
+    <Grid>
+
+    </Grid>
+ 
+</Window>

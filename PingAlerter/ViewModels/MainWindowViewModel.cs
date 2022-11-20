@@ -31,14 +31,14 @@ namespace PingAlerter.ViewModels
 
         private void InitClass()
         {
-            Observer<int> TabControlObserver = new Observer<int>(
+            /*Observer<int> TabControlObserver = new Observer<int>(
                 (data) =>
                 {
                     statusBarViewModel.ScanCount = data;
                 }
                 );
 
-            monitorTabControlViewModel.Subscribe(TabControlObserver);
+            monitorTabControlViewModel.Subscribe(TabControlObserver);*/
         }
 
     }

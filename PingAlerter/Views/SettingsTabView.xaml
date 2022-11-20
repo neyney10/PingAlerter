@@ -6,18 +6,17 @@
              xmlns:local="clr-namespace:PingAlerter.Views"
              mc:Ignorable="d" MinHeight="160"
              DataContext="{Binding MonitorConfigViewModel}" Name="UC" Style="{StaticResource ResponsiveTextUI}" ScrollViewer.VerticalScrollBarVisibility="Auto">
-    
+
     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-        <Grid>
+        <Grid MinHeight="353">
             <Grid.RowDefinitions>
-                <RowDefinition MinHeight="35" MaxHeight="100" />
+                <RowDefinition  MinHeight="35" MaxHeight="100" />
                 <RowDefinition  MinHeight="35" MaxHeight="100" />
                 <RowDefinition  MinHeight="35" MaxHeight="100"  />
                 <RowDefinition />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition MinWidth="30" MaxWidth="250" />
-                <ColumnDefinition MinWidth="30" />
+                <ColumnDefinition MinWidth="30" Width="1*" />
             </Grid.ColumnDefinitions>
             <Grid.Background>
                 <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
@@ -25,15 +24,31 @@
                     <GradientStop Color="White"/>
                 </LinearGradientBrush>
             </Grid.Background>
-            <StackPanel Orientation="Vertical" Grid.Row="0">
-                <Label x:Name="label_Copy2" Content="General Addresses:" HorizontalAlignment="Left" VerticalAlignment="Top" MinWidth="120" FontWeight="Bold" Foreground="#FF2527D0" Margin="9,0,0,0" MinHeight="26"/>
-                <StackPanel  Orientation="Horizontal" Margin="19,0,2,2">
-                    <Label x:Name="label" Content="Latency Threshold:" HorizontalAlignment="Left" VerticalAlignment="Top" MinWidth="111" MinHeight="26"/>
-                    <TextBox x:Name="txtb_lat_thresh" HorizontalAlignment="Left" Height="23" Margin="0,2,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" Text="{Binding LatencyThreshold}" Background="White"/>
-                </StackPanel>
-                <StackPanel  Orientation="Horizontal" Margin="19,0,2,2" >
-                    <Label x:Name="label_Copy" Content="Stability Threshold:" HorizontalAlignment="Left" VerticalAlignment="Top" MinWidth="111" MinHeight="26" Margin="0,0,0,-0.4"/>
-                    <TextBox x:Name="txtb_stab_thresh" HorizontalAlignment="Left" MinHeight="23" Margin="0,3,0,0" TextWrapping="Wrap" VerticalAlignment="Top" MinWidth="50" Text="{Binding StdDeviationThreshold}" Height="7" />
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal" Grid.Row="0">
+                    <StackPanel  Orientation="Vertical"  Grid.Column="0">
+                        <Label x:Name="label_Copy2" Content="General Addresses:" HorizontalAlignment="Left" VerticalAlignment="Top" MinWidth="120" FontWeight="Bold" Foreground="#FF2527D0" Margin="9,0,0,0"/>
+                        <StackPanel  Orientation="Horizontal" Margin="19,0,0,0">
+                            <Label x:Name="label" Content="Latency Threshold:" HorizontalAlignment="Left" VerticalAlignment="Top" MinWidth="111" MinHeight="26"/>
+                            <TextBox x:Name="txtb_lat_thresh" HorizontalAlignment="Left" MinHeight="23" Margin="0,0,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" Text="{Binding LatencyThreshold}" Background="White"/>
+                        </StackPanel>
+                        <StackPanel  Orientation="Horizontal" Margin="19,0,0,0" >
+                            <Label x:Name="label_Copy" Content="Stability Threshold:" HorizontalAlignment="Left" VerticalAlignment="Top" MinWidth="111" MinHeight="26" Margin="0,0,0,0"/>
+                            <TextBox x:Name="txtb_stab_thresh" HorizontalAlignment="Left" MinHeight="23" Margin="0,0,0,0" TextWrapping="Wrap" VerticalAlignment="Top" MinWidth="50" Text="{Binding StdDeviationThreshold}" />
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Vertical" Grid.Column="1" Margin="20,0,0,0">
+                        <Label x:Name="lbl_precheck" Content="PreCheck:" HorizontalAlignment="Left" VerticalAlignment="Top" MinWidth="120" FontWeight="Bold" Margin="2,0,0,0" Foreground="#FF2527D0" MinHeight="23"/>
+                        <StackPanel  Margin="12.6,0,2,2" Orientation="Horizontal">
+                            <Label x:Name="label_Copy8" Content="Sample Amount:" HorizontalAlignment="Left" VerticalAlignment="Top" MinWidth="85" MinHeight="26"/>
+                            <TextBox x:Name="txtb_precheck_sample_amount" HorizontalAlignment="Left" MinHeight="23"  TextWrapping="Wrap" VerticalAlignment="Top" MinWidth="50" Text="{Binding PreCheckAmountOfSamples}"/>
+                        </StackPanel>
+                        <StackPanel  Margin="12.6,0,2,2" Orientation="Horizontal">
+                            <Label x:Name="label_Copy10" Content="Ping Amount:" HorizontalAlignment="Left" VerticalAlignment="Top" MinWidth="70" MinHeight="26"/>
+                            <TextBox x:Name="txtb_precheck_ping_amount" HorizontalAlignment="Left" MinHeight="23" TextWrapping="Wrap" VerticalAlignment="Top" MinWidth="50" Text="{Binding PreCheckAmountOfPingsPerSample}"/>
+                        </StackPanel>
+                    </StackPanel>
                 </StackPanel>
             </StackPanel>
             <StackPanel Orientation="Vertical" Grid.Row="1">
@@ -47,48 +62,28 @@
                     <TextBox x:Name="txtb_def_stab_thresh" HorizontalAlignment="Left" MinHeight="23" Margin="0,3,0,0" TextWrapping="Wrap" VerticalAlignment="Top" MinWidth="51" Text="{Binding DefGatewayStdDeviationThreshold}"/>
                 </StackPanel>
             </StackPanel>
-            <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="1">
-                <Label x:Name="lbl_precheck" Content="PreCheck:" HorizontalAlignment="Left" VerticalAlignment="Top" MinWidth="120" FontWeight="Bold" Margin="2,0,0,0" Foreground="#FF2527D0" MinHeight="24"/>
-                <StackPanel  Margin="12.6,0,2,2" Orientation="Horizontal">
-                    <Label x:Name="label_Copy8" Content="Sample Amount:" HorizontalAlignment="Left" VerticalAlignment="Top" MinWidth="85" MinHeight="26"/>
-                    <TextBox x:Name="txtb_precheck_sample_amount" HorizontalAlignment="Left" MinHeight="23" Margin="0,2,0,0" TextWrapping="Wrap" VerticalAlignment="Top" MinWidth="50" Text="{Binding PreCheckAmountOfSamples}"/>
-                </StackPanel>
-                <StackPanel  Margin="12.6,0,2,2" Orientation="Horizontal">
-                    <Label x:Name="label_Copy10" Content="Ping Amount:" HorizontalAlignment="Left" VerticalAlignment="Top" MinWidth="70" MinHeight="26"/>
-                    <TextBox x:Name="txtb_precheck_ping_amount" HorizontalAlignment="Left" MinHeight="23" Margin="16,3,0,0" TextWrapping="Wrap" VerticalAlignment="Top" MinWidth="50" Text="{Binding PreCheckAmountOfPingsPerSample}"/>
-                </StackPanel>
-            </StackPanel>
             <StackPanel Orientation="Vertical" Grid.Row="2" Grid.ColumnSpan="2" >
                 <Label x:Name="lbl_alert_content" Content="Alert Options:" HorizontalAlignment="Left" VerticalAlignment="Top" MinWidth="120" FontWeight="Bold" Margin="5,0,0,0" Foreground="#FF2527D0" MinHeight="26"/>
                 <CheckBox x:Name="checkBox_sound" Content="Make Sound?" Margin="19,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" IsChecked="{Binding IsSoundOn}" MinHeight="15" MinWidth="91"/>
                 <StackPanel  Orientation="Horizontal" Margin="19,0,2,2">
                     <Label x:Name="lbl_alert_sound" Content="Alert Sound (.wav):" HorizontalAlignment="Left"  VerticalAlignment="Top" MinWidth="105" RenderTransformOrigin="0.484,0.839" MinHeight="26" />
-                    <TextBox x:Name="txtb_alert_soundfilepath" MinHeight="28" MaxHeight="78" TextWrapping="Wrap" VerticalAlignment="Top" MinWidth="248"  Text="{Binding SoundFilepath}" Background="#FFE9EFF1" HorizontalAlignment="Left"/>
-                    <Button x:Name="btn_AlertSoundFileBrowser" Content="Browse..." HorizontalAlignment="Left" Margin="5,4,0,0" VerticalAlignment="Top" MinWidth="75" Command="{Binding BrowseAlertSoundFLCmd}" MinHeight="19" >
-                        <Button.Background>
-                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                                <GradientStop Color="#FF7E91F3" Offset="1"/>
-                                <GradientStop Color="#FFC4CBF0"/>
-                            </LinearGradientBrush>
-                        </Button.Background>
-                    </Button>
+                    <TextBox x:Name="txtb_alert_soundfilepath" MinHeight="28" MaxHeight="78" TextWrapping="Wrap" VerticalAlignment="Top" MinWidth="248"  Text="{Binding SoundFilepath}" HorizontalAlignment="Left" Background="{StaticResource MaterialDesignLightBackground}"/>
+                    <Button x:Name="btn_AlertSoundFileBrowser" Content="Browse..." HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" MinWidth="65" Command="{Binding BrowseAlertSoundFLCmd}" ></Button>
                 </StackPanel>
             </StackPanel>
             <StackPanel Orientation="Vertical" Grid.Row="3" Grid.ColumnSpan="2">
                 <Label x:Name="label_Copy11" Content="Log Options:" HorizontalAlignment="Left" VerticalAlignment="Top" MinWidth="120" FontWeight="Bold" Margin="5,0,0,0" Foreground="#FF2527D0" MinHeight="25" />
                 <StackPanel Orientation="Horizontal">
                     <Label x:Name="label_Copy12" Content="Log Filepath:" HorizontalAlignment="Left" Margin="19,0,0,0" VerticalAlignment="Top" MinWidth="75"  MinHeight="26" />
-                    <TextBox x:Name="txtb_log_flepath" Margin="30,0,0,0" MinHeight="28" MaxHeight="56" TextWrapping="Wrap" VerticalAlignment="Top" MinWidth="248" Text="{Binding LogFilepath}" Background="#FFE9EFF1" HorizontalAlignment="Left" ScrollViewer.CanContentScroll="True"/>
-                    <Button x:Name="btn_LogFileBrowser" Content="Browse..." HorizontalAlignment="Left" Margin="5,5,0,0" VerticalAlignment="Top" MinWidth="75" Command="{Binding BrowseLogFLCmd}" BorderBrush="#FF464D77" MinHeight="19">
-                        <Button.Background>
-                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                                <GradientStop Color="#FF7E91F3" Offset="1"/>
-                                <GradientStop Color="#FFC4CBF0"/>
-                            </LinearGradientBrush>
-                        </Button.Background>
-                    </Button>
+                    <TextBox x:Name="txtb_log_flepath" Margin="30,0,0,0" MinHeight="28" MaxHeight="56" TextWrapping="Wrap" VerticalAlignment="Top" MinWidth="248" Text="{Binding LogFilepath}" Background="{StaticResource MaterialDesignLightBackground}" HorizontalAlignment="Left" ScrollViewer.CanContentScroll="True" />
+                    <Button x:Name="btn_LogFileBrowser" Content="Browse..." HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Command="{Binding BrowseLogFLCmd}" MinWidth="65"></Button>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label x:Name="label_Copy1" Content="MySql connString:" HorizontalAlignment="Left" Margin="19,0,0,0" VerticalAlignment="Top" MinWidth="75"  MinHeight="26" Grid.Row="3" />
+                    <TextBox x:Name="txtb_log_mysql_connstring"  MinHeight="28" MaxHeight="56" TextWrapping="Wrap" VerticalAlignment="Top" MinWidth="248" Text="{Binding LogMySQLConnString}" HorizontalAlignment="Left" ScrollViewer.CanContentScroll="True" Grid.ColumnSpan="2" Grid.Row="3"/>
                 </StackPanel>
             </StackPanel>
-        </Grid>
+            
+ </Grid>
     </ScrollViewer>
 </UserControl>

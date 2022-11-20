@@ -1,4 +1,5 @@
-﻿using PingAlerter.Other.Log;
+﻿using PingAlerter.Network;
+using PingAlerter.Other.Log;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +10,9 @@ namespace PingAlerter.IO
 {
     public interface ILogger
     {
-        void SaveLog(LogData log);
+        void SaveLog(Scan scan);
+        //void SaveLog(ScanLog scanLog);
 
-        IEnumerable<LogData> ReadLogs();
+        IReadOnlyCollection<ScanLog> ReadLogs();
     }
 }

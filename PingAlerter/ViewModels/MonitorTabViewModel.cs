@@ -13,6 +13,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -34,7 +35,7 @@ namespace PingAlerter.ViewModels
         public string txtb_newAddress { get { return Model.txtb_newAddress; } set { this.Model.txtb_newAddress = value; } }
 
         // this ViewModel interaction logic
-        public ICommand startLatencyMonitorCommand { get; set; }
+        public StartLatencyMonitorCommand startLatencyMonitorCommand { get; set; }
         public ICommand AddNewAddressCommand { get; set; }
         public ICommand AddNewAddressFromFileCommand { get; set; }
         private Brush btnStartBackgroundColor;
@@ -56,6 +57,8 @@ namespace PingAlerter.ViewModels
 
         // Temp data members
         Observer<MonitorServiceNotify> MonitorObserver;
+            // setup address format validation tools.
+        Regex rx = new Regex(@"\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}");
 
         #region Constructors
         // constructor with default dependancy
@@ -138,12 +141,7 @@ namespace PingAlerter.ViewModels
 
                 if (IsChecked)
                 {
-                    IsChecked = false;
-                    Monitor.Abort(); // TODO: change it to stop the thread using a boolean or somethin.
-
-                    this.ViewModel.BtnStartBackgroundColor = new LinearGradientBrush(Color.FromRgb(25, 200, 33), Color.FromRgb(0, 233, 88), 1);
-                    this.ViewModel.BtnStartContent = "Start!";
-
+                    this.Abort();
                 }
                 else
                 {
@@ -169,11 +167,21 @@ namespace PingAlerter.ViewModels
                     handler.Invoke(this, EventArgs.Empty);
                 }
             }
+
+            public void Abort()
+            {
+                IsChecked = false;
+                this.ViewModel.BtnStartBackgroundColor = new LinearGradientBrush(Color.FromRgb(25, 200, 33), Color.FromRgb(0, 233, 88), 1);
+                this.ViewModel.BtnStartContent = "Start!";
+
+                if (Monitor != null)
+                    Monitor.Abort(); // TODO: change it to stop the thread using a boolean or somethin.
+            }
         }
 
         private void AddNewAddress(string address)
-        {  
-            if(!this.Model.Addresses.Contains(address))
+        {
+            if (rx.IsMatch(address) && !this.Model.Addresses.Contains(address))
                 // if the list does not have this address already, add it to the list (do not store duplicated values).
                 this.Model.Addresses.Add(address);
         }

@@ -5,11 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:converters="clr-namespace:PingAlerter.Common.Converters"
              d1p1:Ignorable="d" 
-             xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006">
-  <Application.Resources>
+             xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+    <Application.Resources>
         <ResourceDictionary>
             <converters:IsEqualOrGreaterThanConverter x:Key="IsEqualOrGreaterThanConverter"/>
-            <Style x:Key="ResponsiveTextUI" TargetType="UserControl">
+            <Style x:Key="ResponsiveTextUI" TargetType="Control">
                 <Style.Triggers>
                     <DataTrigger Value="True" 
                          Binding="{Binding ActualHeight, ElementName=UC, 
@@ -20,11 +21,23 @@
                     <DataTrigger Value="True" 
                          Binding="{Binding ActualHeight, ElementName=UC, 
                          Converter={StaticResource IsEqualOrGreaterThanConverter}, 
+                         ConverterParameter=562}">
+                        <Setter Property="FontSize" Value="16"/>
+                    </DataTrigger>
+                    <DataTrigger Value="True" 
+                         Binding="{Binding ActualHeight, ElementName=UC, 
+                         Converter={StaticResource IsEqualOrGreaterThanConverter}, 
                          ConverterParameter=724}">
                         <Setter Property="FontSize" Value="18"/>
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
+
+
+            <ResourceDictionary.MergedDictionaries>
+                <materialDesign:BundledTheme BaseTheme="Light" PrimaryColor="Indigo" SecondaryColor="DeepOrange" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+            </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
   </Application.Resources>
 </Application>

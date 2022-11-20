@@ -1,7 +1,7 @@
 ﻿using PingAlerter.ViewModels;
 using System.Windows.Controls;
 using System;
-
+using System.Diagnostics;
 
 namespace PingAlerter.Views
 {
@@ -10,7 +10,11 @@ namespace PingAlerter.Views
     /// </summary>
     public partial class AboutTabView : UserControl
     {
-        public AboutViewModel AboutViewModel { get; set; }
+        public AboutViewModel AboutViewModel
+        {
+            set { this.DataContext = value; }
+            get { return this.DataContext as AboutViewModel; }
+        }
 
         public AboutTabView()
         {

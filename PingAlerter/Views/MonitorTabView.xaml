@@ -24,21 +24,9 @@
             <Label x:Name="lbl_AddNewAddress" Content="Add another host/address to monitor" DockPanel.Dock="Top" />
             <TextBox x:Name="textBox" HorizontalAlignment="Left" Margin="5,0,0,0" MinHeight="23" MinWidth="120"  DockPanel.Dock="Top" TextWrapping="Wrap" Text="{Binding txtb_newAddress}" />
             <Button x:Name="btn_AddNewAddress" Content="Add to address List" Margin="5,5,0,0" MinHeight="23" MinWidth="120" HorizontalAlignment="Left" DockPanel.Dock="Top"  Command="{Binding AddNewAddressCommand}">
-            <Button.Background>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="#FFA3EA77" Offset="0.926"/>
-                    <GradientStop Color="#FFDDF7D3" Offset="0.199"/>
-                </LinearGradientBrush>
-            </Button.Background>
-        </Button>
+            </Button>
             <Button x:Name="btn_AddNewAddressFromFile" Margin="5,5,0,0" Content="from file" HorizontalAlignment="Left" DockPanel.Dock="Top"  MinWidth="120" Command="{Binding AddNewAddressFromFileCommand}">
-            <Button.Background>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="#FFA3EA77" Offset="0.926"/>
-                    <GradientStop Color="#FFDDF7D3" Offset="0.199"/>
-                </LinearGradientBrush>
-            </Button.Background>
-        </Button>
+            </Button>
             <Button x:Name="btn_start" Content="{Binding BtnStartContent}"  DockPanel.Dock="Bottom" Height="49" FontSize="36" FontWeight="Bold" Cursor="Hand" BorderBrush="#FF656566"  Background="{Binding BtnStartBackgroundColor}" Command="{Binding startLatencyMonitorCommand}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
         </DockPanel>
     </DockPanel>

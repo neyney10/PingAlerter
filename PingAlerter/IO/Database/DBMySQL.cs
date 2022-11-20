@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -15,15 +16,17 @@ namespace PingAlerter.IO.Database
     ///  https://stackoverflow.com/questions/21618015/how-to-connect-to-mysql-database.
     /// Wrapper class for MySqlClient
     /// </summary>
-    public class DBMySQL: IDBConnection
+    public class DBMySQL : IDBConnection
     {
         #region Properties
         private MySqlConnection Connection;
+        public readonly string ConnectionString;
         #endregion
 
         #region Constructor
         public DBMySQL(string connectionString)
         {
+            ConnectionString = connectionString;
             Connection = new MySqlConnection(connectionString);
         }
         #endregion
@@ -76,6 +79,37 @@ namespace PingAlerter.IO.Database
             else success = false;
 
             return success;
+        }
+
+        public void StoreTransaction(IEnumerable<string> queries)
+        {
+            MySqlTransaction transaction = Connection.BeginTransaction();
+
+            try
+            {
+                foreach (string query in queries)
+                {
+                    var cmd = new MySqlCommand(query, Connection)
+                    {
+                        Connection = Connection,
+                        Transaction = transaction
+                    };
+                    cmd.ExecuteNonQuery();
+                }
+
+                transaction.Commit();
+            }
+            catch (Exception e)
+            {
+                try
+                {
+                    transaction.Rollback();
+                }
+                catch (SqlException ex)
+                {
+                    //...
+                }
+            }
         }
 
         #endregion

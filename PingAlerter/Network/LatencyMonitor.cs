@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PingAlerter.Common.State;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -28,7 +29,6 @@ namespace PingAlerter.Network
 
         public void PreCheck(IEnumerable<string> hosts, int amount_of_samples, int amount_of_ping_samples, int delay_between_samples)
         {
-
             // create new entries for hosts / clean history.
             foreach (string host in hosts)
             {

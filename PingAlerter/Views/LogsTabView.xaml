@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:PingAlerter.Views"
              mc:Ignorable="d" 
              DataContext="{Binding LogViewModel}" Name="UC" Style="{StaticResource ResponsiveTextUI}"> 
-    <Grid Background="#FFE5E5E5" Margin="0,1,-0.2,-1">
-        <DataGrid Name="datagrid_logs" ItemsSource="{Binding Logs}" AlternationCount="2" SelectionMode="Single" AlternatingRowBackground="{DynamicResource {x:Static SystemColors.InfoBrushKey}}" IsReadOnly="True" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" BorderThickness="0" />
+    <Grid Background="#FFE5E5E5">
+        <DataGrid Name="datagrid_logs" ItemsSource="{Binding Logs}" AlternationCount="2" SelectionMode="Single" AlternatingRowBackground="{DynamicResource {x:Static SystemColors.InfoBrushKey}}" IsReadOnly="True" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" BorderThickness="0"/>
     </Grid>
 </UserControl>

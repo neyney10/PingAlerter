@@ -3,49 +3,32 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:Views="clr-namespace:PingAlerter.Views"
              mc:Ignorable="d" >
 
 
-    <TabControl x:Name="tabControl" Grid.ColumnSpan="2" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Grid.IsSharedSizeScope="True" UseLayoutRounding="True">
-        <TabItem x:Name="tab_logs" Header="Logs" Height="22" Margin="0" VerticalAlignment="Top" Grid.IsSharedSizeScope="True">
-            <Views:LogsTabView DataContext="{Binding logViewModel}"/>
-        </TabItem>
-        <TabItem x:Name="tab_monitor" Header="Monitor" RenderTransformOrigin="0.5,0.508" Margin="0.2,0,0.2,0.4" Grid.IsSharedSizeScope="True" Height="22" VerticalAlignment="Bottom">
+    
+    <TabControl x:Name="tabControl" VerticalContentAlignment="Top" 
+                Style="{StaticResource MaterialDesignNavigationRailTabControl}"
+                Background="{StaticResource MaterialDesignToolBarBackground}">
+
+        <TabItem x:Name="tab_monitor" Header="Monitor" Grid.IsSharedSizeScope="True" VerticalAlignment="Center" Style="{DynamicResource MaterialDesignTabItem}">
             <Views:MonitorTabView DataContext="{Binding monitorTabViewModel}"/>
         </TabItem>
-        <TabItem x:Name="tab_settings" RenderTransformOrigin="0.5,0.508" Header="Settings" Margin="0" Grid.IsSharedSizeScope="True">
-            <TabItem.Background>
-                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
-                    <GradientStop Color="#FFF0F0F0" Offset="0"/>
-                    <GradientStop Color="#FFE5E5E5" Offset="1"/>
-                </LinearGradientBrush>
-            </TabItem.Background>
+        <TabItem x:Name="tab_settings" Header="Settings" Margin="0" Grid.IsSharedSizeScope="True" VerticalAlignment="Center" Style="{DynamicResource MaterialDesignTabItem}">
             <Views:SettingsTabView DataContext="{Binding monitorConfigViewModel}"/>
         </TabItem>
-        <TabItem x:Name="tab_about" Header="About" Height="22" Margin="0" VerticalAlignment="Top" Grid.IsSharedSizeScope="True">
+        <TabItem x:Name="tab_logs" Header="Logs" Grid.IsSharedSizeScope="True" VerticalAlignment="Center" Style="{DynamicResource MaterialDesignTabItem}">
+            <Views:LogsTabView DataContext="{Binding logViewModel}"/>
+        </TabItem>
+        <TabItem x:Name="tab_charts" Header="Charts"  Margin="0" VerticalAlignment="Center" Grid.IsSharedSizeScope="True" Style="{DynamicResource MaterialDesignTabItem}">
+            <Views:LineChartView DataContext="{Binding chartsViewModel}"/>
+        </TabItem>
+        <TabItem x:Name="tab_about" Header="About"  Margin="0" VerticalAlignment="Center" Grid.IsSharedSizeScope="True" Style="{DynamicResource MaterialDesignTabItem}">
             <Views:AboutTabView DataContext="{Binding aboutViewModel}"/>
         </TabItem>
-        <TabItem x:Name="tab_experimental" BorderBrush="#FFB08521" Header="Experimental" Margin="0" Grid.IsSharedSizeScope="True">
-            <TabItem.Background>
-                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
-                    <GradientStop Color="#FFF0F0F0" Offset="0"/>
-                    <GradientStop Color="#FFFABC6D" Offset="1"/>
-                </LinearGradientBrush>
-            </TabItem.Background>
 
-            <Grid Margin="0,1,-0.2,-1">
-                <Grid.Background>
-                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                        <GradientStop Color="#FFF6C5A5" Offset="1"/>
-                        <GradientStop Color="White"/>
-                    </LinearGradientBrush>
-                </Grid.Background>
-                <Button x:Name="Btn_experimental" Content="Button" HorizontalAlignment="Left" Margin="144,56,0,0" VerticalAlignment="Top" Width="163" Height="58" Command="{Binding Btn_experimental_OnClick}"/>
-
-            </Grid>
-
-        </TabItem>
 
     </TabControl>
 

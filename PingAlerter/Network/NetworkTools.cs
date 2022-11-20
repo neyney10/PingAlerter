@@ -15,13 +15,13 @@ namespace PingAlerter.Network
     public static class NetworkTools
     {
        
-        public static string defaultGatewayAddress;
+        private static string defaultGatewayAddress;
         public static string DefaultGatewayAddress
         { 
             get
             {
                 if (defaultGatewayAddress == null)
-                    DefaultGatewayAddress = GetDefaultGateway().ToString();
+                    defaultGatewayAddress = GetDefaultGateway().ToString();
 
                 return defaultGatewayAddress;
             }
@@ -29,18 +29,14 @@ namespace PingAlerter.Network
             {
                 defaultGatewayAddress = value;
             }
-
         }
 
          public static IReadOnlyDictionary<string, ScanResult> Scan(IEnumerable<string> hosts, int amount_of_samples)
         {
             var current_scans = new Dictionary<string, Task<ScanResult>>();
 
-            var enuHosts = hosts.GetEnumerator();
-            while (enuHosts.MoveNext())
+            foreach(string host in hosts)
             {
-                string host = enuHosts.Current;
-
                 var scan_task = Task.Run(() => PingAddress(host, amount_of_samples));
                 current_scans.Add(host, scan_task);
             }

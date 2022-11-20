@@ -56,31 +56,5 @@ namespace PingAlerter.Views
         }
 
 
-
-        public class ExperimentalViewModel
-        {
-
-            public ICommand Btn_experimental_OnClick { get; set; }
-
-            public ExperimentalViewModel()
-            {
-                this.Btn_experimental_OnClick = new ExperimentalCommand();
-            }
-
-            public class ExperimentalCommand : ICommand
-            {
-                public event EventHandler CanExecuteChanged;
-
-                public bool CanExecute(object parameter)
-                {
-                    return true;
-                }
-
-                public void Execute(object parameter)
-                {
-                    new Window().Show();
-                }
-            }
-        }
     }
 }

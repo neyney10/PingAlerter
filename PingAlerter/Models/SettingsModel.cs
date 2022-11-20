@@ -21,7 +21,7 @@ namespace PingAlerter.Models
         /// </summary>
         /// <param name="configuration"></param>
         /// <param name="alertConfigModel"></param>
-        public SettingsModel() : this(new LatencyMonitorConfig(), new AlertConfigModel(null), new LogConfigModel(null))
+        public SettingsModel() : this(new LatencyMonitorConfig(), new AlertConfigModel(null), new LogConfigModel(null, ""))
         { }
 
         public SettingsModel(LatencyMonitorConfig configuration, AlertConfigModel alertConfigModel, LogConfigModel logConfigModel)

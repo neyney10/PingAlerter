@@ -97,6 +97,12 @@ namespace PingAlerter.ViewModels
             set { settings.logConfigModel.Filepath = value; OnPropertyChanged("LogFilepath"); }
         }
 
+        public string LogMySQLConnString
+        {
+            get { return settings.logConfigModel.MySQLConnString; }
+            set { settings.logConfigModel.MySQLConnString = value; OnPropertyChanged("LogMySQLConnString"); }
+        }
+
         #endregion
 
         #endregion

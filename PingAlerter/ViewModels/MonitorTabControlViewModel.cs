@@ -6,6 +6,11 @@ using PingAlerter.Models;
 using PingAlerter.Network;
 using PingAlerter.Other.Log;
 using PingAlerter.Other.MonitorTab;
+using System;
+using System.Diagnostics;
+using System.Threading;
+using System.Windows;
+using System.Windows.Input;
 
 namespace PingAlerter.ViewModels
 {
@@ -23,42 +28,45 @@ namespace PingAlerter.ViewModels
         public MonitorConfigViewModel monitorConfigViewModel { get; set; } // for Settings tab
         public AboutViewModel aboutViewModel { get; set; } // for About tab
         public LogViewModel logViewModel { get; set; } // for Logs tab
+        public LineChartViewModel chartsViewModel { get; set; } // for Charts tab
         #endregion
 
         #region Constructor, dependancy injections and Members setup.
         public MonitorTabControlViewModel()
         {
             alertConfig = new AlertConfigModel(@"D:\temp\Projects\C#\PingAlerter\PingAlerter\LoadScript.wav");
-            logConfig = new LogConfigModel(@"D:\LogFile.txt");
-            // TEST
-            //DBLogger = new DBMySQLLogger("Server=127.0.0.1;Database=pingalerterlogs;Uid=root;Pwd=toor;");
+            logConfig = new LogConfigModel(@"D:\LogFile.txt", "server =127.0.0.1;uid=root;pwd=root;database=sys;Allow User Variables=True");
 
             InitViewModels();
             InitClass();
         }
-        
+
         private void InitClass()
         {
             Observer<MonitorServiceNotify> o = new Observer<MonitorServiceNotify>(
-          (data) =>
-          {
-              switch (data.eventType)
-              {
-                  case MonitorServiceNotify.Type.Log:
-                      logViewModel.AddLog(data.Data);
-                      break;
-                  case MonitorServiceNotify.Type.OverThreshold:
-                      logViewModel.AddLog(data.Data);
-                      if(alertConfig.IsSoundOn)
-                         alertConfig.PlaySound();
-                      break;
-              }
+                (data) =>
+                {
+                    if (data.Scan.Alerts.Count > 0)
+                    {
+                        if (alertConfig.IsSoundOn)
+                            alertConfig.PlaySound();
+                    }
 
-              logConfig.SaveLog(data.Data);
+                    logViewModel.AddLog(data.Scan);
 
-              NotifyObservers(data.ScanCount);
-
-          });
+                    try
+                    {
+                        logConfig.SaveLog(data.Scan);
+                    }
+                    catch (Exception ex)
+                    {
+                        Application.Current.Dispatcher.BeginInvoke((Action)delegate
+                        {
+                            monitorTabViewModel.startLatencyMonitorCommand.Abort();
+                            ShowErrorMessageBox(ex.Message);
+                        });
+                    }
+                });
 
             monitorTabViewModel.Subscribe(o);
 
@@ -67,7 +75,7 @@ namespace PingAlerter.ViewModels
         private void InitViewModels()
         {
             LatencyMonitorConfig monitorConfigModel = new LatencyMonitorConfig();
-            
+
             SettingsModel settings = new SettingsModel(monitorConfigModel, alertConfig, logConfig);
 
             #region Log Tab
@@ -90,12 +98,25 @@ namespace PingAlerter.ViewModels
             this.aboutViewModel = new AboutViewModel();
             #endregion
 
-            #region Experimental Tab
-            // Experimental tab
-            //ExperimentalViewModel experimentalViewModel = new ExperimentalViewModel();
-            #endregion
+            #region Charts Tab
+            this.chartsViewModel = new LineChartViewModel();
+            #endregion region
+
 
         }
         #endregion
+
+        private void ShowErrorMessageBox(string text)
+        {
+            string caption = "Log Error";
+            MessageBoxButton button = MessageBoxButton.OK;
+            MessageBoxImage icon = MessageBoxImage.Error;
+
+            MessageBox.Show(text, caption, button, icon, MessageBoxResult.Yes);
+        }
+
+
+       
+
     }
 }
