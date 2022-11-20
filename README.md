@@ -53,6 +53,53 @@ the tool also differentiate Latency to router (Wi-Fi) and Latency to remote serv
 - Log Options: logging scans to file or database (currently only supports file)
     - Log Filepath: a txt filepath to save/append logs, does not overwrite on new monitoring sessions. Empty filepath disables this option.
     - connString: a MySQL Connection string.  Empty string disables this option. Please note that the app must have permissions to use user variables, by appending `Allow User Variables=True` to the end of the connection string.
+
+## Configure MySQL Database Schema
+There are 3 tables to setup:
+1. Scans
+2. Results
+3. Alerts
+
+### Scans Table DDL
+```
+CREATE TABLE `scans` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `timestamp` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=974 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+```
+
+### Results Table DDL
+```
+CREATE TABLE `results` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `min` int(10) unsigned zerofill DEFAULT NULL,
+  `max` int(10) unsigned zerofill DEFAULT NULL,
+  `avg` int(10) unsigned zerofill DEFAULT NULL,
+  `failed` int(10) unsigned zerofill DEFAULT NULL,
+  `scan_id` int unsigned NOT NULL,
+  `address` varchar(25) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  KEY `scan_id_idx` (`scan_id`),
+  CONSTRAINT `scan_id` FOREIGN KEY (`scan_id`) REFERENCES `scans` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2782 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+```
+
+### Alerts Table DDL
+```
+CREATE TABLE `alerts` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `type` varchar(25) NOT NULL,
+  `scan_id` int unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  KEY `scan_id_idx` (`scan_id`),
+  CONSTRAINT `scan_id-alerts` FOREIGN KEY (`scan_id`) REFERENCES `scans` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+```
+
 ## Dependencies and Requirements
 
  - Windows Vista and up (Does not support linux for now)
